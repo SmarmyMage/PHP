@@ -14,7 +14,7 @@ $albums = array("Erykah Badu" => "Mama's Gun", "UMI" => "Introspection", "Cibo M
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <title><?php echo $pageTitle; ?></title>
+        <title><?php echo "<p>$pageTitle</p>"; ?></title>
     </head>
 
     <body class="pl-2">
@@ -44,7 +44,7 @@ $albums = array("Erykah Badu" => "Mama's Gun", "UMI" => "Introspection", "Cibo M
                                 <option value="">-----------------</option>
                                     <?php
                                     foreach($albums as $key => $value):
-                                    echo '<option value="'.$key.'">'.$key.' - '.$value.'</option>';
+                                    echo "<option value="'.$key.'">'.$key.' - '.$value.'</option>";
                                     endforeach;
                                     ?>
                                 </select>

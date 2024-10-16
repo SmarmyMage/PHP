@@ -17,7 +17,7 @@ if (empty($_POST['userName'])) {
 
 if (empty($_POST['quantity'])) {
     $quantity = NULL;
-    $quantityError = "><p class='error'>Quantity was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
+    $quantityError = "<p class='error'>Quantity was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
 } else {
     $quantity = $_POST['quantity'];
     $quantityError = NULL;
@@ -25,7 +25,7 @@ if (empty($_POST['quantity'])) {
 
 if (!isset($_POST['media'])) {
     $media = NULL;
-    $mediaError = "><p class='error'>Media selection was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
+    $mediaError = "<p class='error'>Media selection was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
 } else {
     $media = $_POST['media'];
     $mediaError = NULL;
