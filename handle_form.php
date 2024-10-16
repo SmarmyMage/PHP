@@ -4,18 +4,18 @@ $shipping = 2.99;
 $downloadPrice = 9.99;
 $cdPrice = 12.99;
 $heading = "Cost by Quantity";
-$orderList = NULL;
+$orderList = '';
 
 
-if(empty($_POST['userName'])) {
+if (empty($_POST['userName'])) {
     $userName = "Guest";
-    $userNameError = "><p class='error'>Username was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
+    $userNameError = "<p class='error'>Username was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
 } else {
     $userName = $_POST['userName'];
     $userNameError = NULL;
 }
 
-if(empty($_POST['quantity'])) {
+if (empty($_POST['quantity'])) {
     $quantity = NULL;
     $quantityError = "><p class='error'>Quantity was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
 } else {
@@ -23,7 +23,7 @@ if(empty($_POST['quantity'])) {
     $quantityError = NULL;
 }
 
-if(isset($_POST['media'])) {
+if (!isset($_POST['media'])) {
     $media = NULL;
     $mediaError = "><p class='error'>Media selection was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
 } else {
@@ -31,16 +31,21 @@ if(isset($_POST['media'])) {
     $mediaError = NULL;
 }
 
-for ($i = $quantity, $i >= 0, $i++) {
-    $totalCDPrice = $i * ($cdPrice + $shipping); 
-    echo "<p>The price for $quantity CD(s) is $totalCDPrice.<p>";
+if ($media == "cd") {
+    for ($i = 1; $i <= $quantity; $i++) {
+        $totalCDPrice = $i * ($cdPrice + $shipping); 
+        $orderList .= "<p>The price for $i CD(s) is $totalCDPrice.<p>";
+    }
 }
 
-while ($media = "dl") {
-    $totalDownloadPrice = $quantity * ($downloadPrice + $shipping);
-    echo "<p>The price for $quantity Download(s) is $totalDownloadPrice.<p>"; 
+if ($media == "download") {
+    $i = 1;
+    while ($i <= $quantity) {
+        $totalDownloadPrice = $quantity * ($downloadPrice + $shipping);
+        $orderList .= "<p>The price for $i Download(s) is $totalDownloadPrice.<p>"; 
+        $i++;
+    }
 }
-
 ?>
 
 <!DOCTYPE html>

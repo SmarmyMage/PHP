@@ -3,8 +3,8 @@
 $pageTitle = "Invoice";
 
 $albums = array("Erykah Badu" => "Mama's Gun", "UMI" => "Introspection", "Cibo Matto" => "Stereotype A", "Tomosuke" => "Marble", "Utada" => "This is the One", 
-"The 1999" => "Journey in the Rain", "UMI" => "Love Language", "UMI" = > "talking to the wind", "Pasteboard" = > "Glitter", "Josh Cooper" = "Fluroescence",
-"The Beatles" => "The White Album")
+"The 1999" => "Journey in the Rain", "UMI" => "Love Language", "UMI" = > "talking to the wind", "Pasteboard" => "Glitter", "Josh Cooper" => "Fluroescence",
+"The Beatles" => "The White Album");
 
 ?>
 
@@ -34,7 +34,7 @@ $albums = array("Erykah Badu" => "Mama's Gun", "UMI" => "Introspection", "Cibo M
                     <p>Please make your selections from the form below.</p>
                     <fieldset class="pl-2">
                         <legend> Sample Form </legend>
-                        <form method="post" action="handle_form.php">
+                        <form method="post" action="handle_invoice.php">
                             <p>
                                 <label for="userName">Name</label><br>
                                 <input type="text" name="userName" id="userName" value="" class="form-control-static">
