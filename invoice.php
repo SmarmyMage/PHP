@@ -3,7 +3,7 @@
 $pageTitle = "Invoice";
 
 $albums = array("Erykah Badu" => "Mama's Gun", "UMI" => "Introspection", "Cibo Matto" => "Stereotype A", "Tomosuke" => "Marble", "Utada" => "This is the One", 
-"The 1999" => "Journey in the Rain", "UMI" => "Love Language", "UMI" = > "talking to the wind", "Pasteboard" => "Glitter", "Josh Cooper" => "Fluroescence",
+"The 1999" => "Journey in the Rain", "UMI" => "Love Language", "UMI" => "talking to the wind", "Pasteboard" => "Glitter", "Josh Cooper" => "Fluroescence",
 "The Beatles" => "The White Album");
 
 ?>
@@ -14,7 +14,7 @@ $albums = array("Erykah Badu" => "Mama's Gun", "UMI" => "Introspection", "Cibo M
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <title><?php echo "<p>$pageTitle</p>"; ?></title>
+        <title><?php echo $pageTitle; ?></title>
     </head>
 
     <body class="pl-2">
@@ -44,7 +44,7 @@ $albums = array("Erykah Badu" => "Mama's Gun", "UMI" => "Introspection", "Cibo M
                                 <option value="">-----------------</option>
                                     <?php
                                     foreach($albums as $key => $value):
-                                    echo "<option value="'.$key.'">'.$key.' - '.$value.'</option>";
+                                    echo '<option value="'.$key.'">'.$key.' - '.$value.'</option>';
                                     endforeach;
                                     ?>
                                 </select>
