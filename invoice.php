@@ -34,7 +34,7 @@ $albums = array("Erykah Badu" => "Mama's Gun", "UMI" => "Introspection", "Cibo M
                     <p>Please make your selections from the form below.</p>
                     <fieldset class="pl-2">
                         <legend> Sample Form </legend>
-                        <form method="post" action="handle_invoice.php">
+                        <form method="post" action="handle-invoice.php">
                             <p>
                                 <label for="userName">Name</label><br>
                                 <input type="text" name="userName" id="userName" value="" class="form-control-static">
