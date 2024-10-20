@@ -1,9 +1,3 @@
-<?php
-
-//$pageTitle = "Template";
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 

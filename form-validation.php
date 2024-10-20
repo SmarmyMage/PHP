@@ -164,7 +164,7 @@ HERE;
 }
 
 $pageTitle = "Form Validation";
-include 'scripts/template.php';
+include 'template.php';
 ?>
 
 <!-- <!DOCTYPE html>
@@ -174,7 +174,7 @@ include 'scripts/template.php';
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-      <title><?php echo $pageTitle; ?></title>
+      <title></title>
    </head>
 
    <body>
@@ -199,7 +199,6 @@ include 'scripts/template.php';
             <section>
                 <h2>Practice Form</h2>
                     <p>Please make your selections from the form below.</p>
-                    <?php print $pageContent ?>
             </section>
         </div>
     </body>
