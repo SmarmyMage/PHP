@@ -114,20 +114,19 @@ $pageContent .= "</pre>";
         $instrumentList .= <<<HERE
         <input type="radio" name="instrument" id="$instrumentName" value="$instrumentName" $instrumentChecked>
         <label for="$instrumentName">$instrumentName</label>&emsp;\n
-        HERE;
+    HERE;
     }
     foreach ($animalArray as $animalIndex = > $animalName) {
         $animalList .= <<<HERE
         <input type="checkbox" name="animal[$animalName]" id="$animalIndex" value="$animalName" $animalChecked>
         <label for="$animalIndex">$animalName</label>&emsp;\n
-        HERE;
+    HERE;
     }
     foreach ($activityArray as $activityName) {
         $activityList .= <<<HERE
         <option value="$activityName" $activityChecked[$activityName]>$activityName</option>\n
-        HERE;
+    HERE;
     }
-}
 
 $pageContent = <<<HERE
 <fieldset class="pl-2">
@@ -159,9 +158,10 @@ $pageContent = <<<HERE
             <p class="form-group">
                 <button type="submit" name="submit" value="Submit" class="btn">Submit</button>
             </p>
-        </form>
-    </fieldset>
+    </form>
+</fieldset>
 HERE;
+}
 
 $pageTitle = "Form Validation";
 
