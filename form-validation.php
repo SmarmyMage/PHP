@@ -164,7 +164,7 @@ HERE;
 }
 
 $pageTitle = "Form Validation";
-include 'template.php'
+include 'scripts/template.php';
 ?>
 
 <!-- <!DOCTYPE html>
