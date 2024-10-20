@@ -128,7 +128,7 @@ $pageContent .= "</pre>";
     HERE;
     }
 
-$pageContent = <<<HERE
+$pageContent .= <<<HERE
 <fieldset class="pl-2">
     <legend> Sample Form </legend>
         <form method="post" action="form-validation.php">
