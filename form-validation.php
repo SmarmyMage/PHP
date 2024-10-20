@@ -92,7 +92,7 @@ if (isset($_POST['submit'])) {
     } else {
         $activity = $_POST['activity'];
         if (in_array($activity, $activityArray)) {
-            $activityChecked[$activity] = "selected"
+            $activityChecked[$activity] = "selected";
         }
     }
 }
@@ -128,7 +128,7 @@ $pageContent .= "</pre>";
     HERE;
     }
 
-$pageContent .= <<<HERE
+$pageContent = <<<HERE
 <fieldset class="pl-2">
     <legend> Sample Form </legend>
         <form method="post" action="form-validation.php">
