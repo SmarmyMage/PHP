@@ -5,7 +5,7 @@ $instrument = NULL;
 $instrumentList = NULL;
 $instrumentChecked = NULL;
 $animal = NULL;
-$animalList = NULL:
+$animalList = NULL;
 $animal1 = $animal2 = NULL;
 $animalChecked = NULL;
 $activity = NULL;
@@ -116,7 +116,7 @@ $pageContent .= "</pre>";
         <label for="$instrumentName">$instrumentName</label>&emsp;\n
     HERE;
     }
-    foreach ($animalArray as $animalIndex = > $animalName) {
+    foreach ($animalArray as $animalIndex => $animalName) {
         $animalList .= <<<HERE
         <input type="checkbox" name="animal[$animalName]" id="$animalIndex" value="$animalName" $animalChecked>
         <label for="$animalIndex">$animalName</label>&emsp;\n

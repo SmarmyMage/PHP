@@ -42,7 +42,7 @@ $seventiesList = "";
 foreach ($band as $bandName => $albumList) {
     $seventiesList .="\n<h2>$band</h2><ul>";
     foreach ($albumList as $songTitle => $songYear) {
-        if ($songYear = "1971", "1973", "1975") {
+        if (in_array($songYear = "1971" "1973" "1975")) {
             $seventiesList .="\n<li>$songTitle - $songYear</li>";
         }
         $seventiesList .="\n</ul>";
