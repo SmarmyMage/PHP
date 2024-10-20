@@ -164,10 +164,10 @@ HERE;
 }
 
 $pageTitle = "Form Validation";
-
+include 'template.php'
 ?>
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
    <head>
@@ -208,4 +208,4 @@ $pageTitle = "Form Validation";
         <p>&copy; Anthony Reyna, MyWebTraining, 2024</p>
    </footer>
 
-</html>
+</html> -->
