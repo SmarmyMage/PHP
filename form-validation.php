@@ -1,23 +1,15 @@
 <?php
-
-$pageTitle = "Form Validation";
-
 $userName = NULL;
 $email = NULL;
 $instrument = NULL;
-$guitarChecked = NULL;
-$pianoChecked = NULL;
-$lyreChecked = NULL;
-$fluteChecked = NULL;
+$instrumentList = NULL;
+$instrumentChecked = NULL;
 $animal = NULL;
-$animalChecked = NULL;
-$animalChecked = NULL;
-$animalChecked = NULL;
+$animalList = NULL:
+$animal1 = $animal2 = NULL;
 $animalChecked = NULL;
 $activity = NULL;
-$activityChecked = NULL;
-$activityChecked = NULL;
-$activityChecked = NULL;
+$activityList = NULL;
 $activityChecked = NULL;
 
 $userNameError = NULL;
@@ -28,56 +20,151 @@ $activityError = NULL;
 
 $valid = false;
 
+$instrumentArray = array('Guitar', 'Piano', 'Lyre', 'Flute');
+foreach ($instrumentArray as $instrumentName){
+    $instrumentChecked[$instrumentName] = NULL;
+}
+
+$animalArray = array('Dog', 'Cat', 'Snake', 'Rabbit');
+foreach ($animalArray as $animalIndex => $animalName){
+    $animalChecked[$animalIndex] = NULL;
+}
+
+$activityArray = array('Tennis', 'Fencing', 'Hanafuda', 'Mancala', 'Golf');
+foreach ($activityArray as $activityName){
+    $activityChecked[$activityName] = NULL;
+}
+
 if (isset($_POST['submit'])) {
 	$valid = true;
-	$userName = htmlspecialchars($_POST['userName']);
-	if (empty($userName)) {
-		$userNameError = "<span class='error'>You must enter a user name.</span>";
-		$valid = false;
-	}
-	$email = htmlspecialchars($_POST['email']);
-	if (empty($email)) {
-		$emailError = "<span class='error'>You must enter an album</span>";
-		$valid = false;
-	}
-	if (isset($_POST['instrument'])) {
-		$instrument = $_POST['instrument'];
-		if ($instrument == "guitar") {$guitarChecked = "checked";}
-		if ($instrument == "piano") {$pianoChecked = "checked";}
-        if ($instrument == "lyre") {$lyreChecked = "checked";}
-		if ($instrument == "flute") {$fluteChecked = "checked";}
-	} else {
-		$instrumentError = "<span class='error'>Please select an instrument.</span>";
-		$valid = false;
-	}
-    if (isset($_POST['animal'])) {
-		$animal = $_POST['animal'];
-		if ($animal == "guitar") {$guitarChecked = "checked";}
-		if ($animal == "piano") {$pianoChecked = "checked";}
-        if ($animal == "lyre") {$lyreChecked = "checked";}
-		if ($animal == "flute") {$fluteChecked = "checked";}
-        //$checked_count = count($_POST['animal']);
-	} else {
-		$animalError = "<span class='error'>Please select two animals.</span>";
-		$valid = false;
-	}
-    /*if (isset($_POST['instrument'])) {
-		$instrument = $_POST['instrument'];
-		if ($instrument == "guitar") {$guitarChecked = "checked";}
-		if ($instrument == "piano") {$pianoChecked = "checked";}
-        if ($instrument == "lyre") {$lyreChecked = "checked";}
-		if ($instrument == "flute") {$fluteChecked = "checked";}
-	} else {
-		$instrumentError = "<span class='error'>Please select an instrument.</span>";
-		$valid = false;
-	}*/
-    if (isset($_POST['activity'])) {
-        $activity = $_POST['activity'];
-        echo $activity;
+
+    if (empty($_POST['userName'])){
+        $userNameError = "<span class='error'>You must enter a user name.</span>";
+        $valid = false;
     } else {
-        $activityError = "<span class='error'>Please select an activity.</span>"
+        $userName = ucfirst(htmlspecialchars($_POST['userName']));
+    }
+
+    if (empty($_POST['email'])){
+        $emailError = "<span class='error'>You must enter an email.</span>";
+        $valid = false;
+    } else {
+        $email = trim($_POST['email']);
+        if (!preg_match('/[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}/', $email)) {
+            $emailError = "<span class='error'>You must enter a valid email address.</span>";
+            $valid = false;
+        }
+    }
+
+    if (empty($_POST['instrument'])){
+        $userNameError = "<span class='error'>You must select an instrument.</span>";
+        $valid = false;
+    } else {
+        $instrument = $_POST['instrument'];
+        if (in_array($instrument, $instrumentArray)) {
+            $instrumentChecked[$instrument] = "checked";
+        }
+    }
+
+    if (isset($_POST['animal'])){
+        $countAnimal = COUNT($_POST['animal']);
+        foreach ($_POST['animal'] as $index => $animal) {
+            $selectedAnimal[] = $animal;
+            if (in_array($animal, $animalArray)) {
+                $animalChecked[$index] = "checked";
+            }
+        }
+        if($countAnimal == 2){
+            $animal1 = $selectedAnimal[0];
+            $animal2 = $selectedAnimal[1];
+        } else {
+            $animalError = "<span class='error'>You must select only two(2) animals.</span>";
+            $valid = false;
+        }
+    } else {
+        $animalError = "<span class='error'>You must select two(2) animals.</span>";
+            $valid = false;
+    }
+
+    if (empty($_POST['activity'])){
+        $activityError = "<span class='error'>You must select an activity.</span>";
+        $valid = false;
+    } else {
+        $activity = $_POST['activity'];
+        if (in_array($activity, $activityArray)) {
+            $activityChecked[$activity] = "selected"
+        }
     }
 }
+	if ($valid) {
+        $pageContent = <<<HERE
+        <h2> Hello $userName!</h2>
+        <p>Your email is $email.<br>
+        Your favorite instrument is $instrument.<br>
+        Your favorite animals are $animal1 and $animal2.<br>
+        Your facorite activity is $activity.</p>
+        HERE;
+
+$pageContent .= "<pre>";
+$pageContent .= print_r($_POST, true);
+$pageContent .= "</pre>";
+
+} else {
+    foreach ($instrumentArray as $instrumentName) {
+        $instrumentList .= <<<HERE
+        <input type="radio" name="instrument" id="$instrumentName" value="$instrumentName" $instrumentChecked>
+        <label for="$instrumentName">$instrumentName</label>&emsp;\n
+        HERE;
+    }
+    foreach ($animalArray as $animalIndex = > $animalName) {
+        $animalList .= <<<HERE
+        <input type="checkbox" name="animal[$animalName]" id="$animalIndex" value="$animalName" $animalChecked>
+        <label for="$animalIndex">$animalName</label>&emsp;\n
+        HERE;
+    }
+    foreach ($activityArray as $activityName) {
+        $activityList .= <<<HERE
+        <option value="$activityName" $activityChecked[$activityName]>$activityName</option>\n
+        HERE;
+    }
+}
+
+$pageContent = <<<HERE
+<fieldset class="pl-2">
+    <legend> Sample Form </legend>
+        <form method="post" action="form-validation.php">
+            <p>
+                <label for="userName">Name $userNameError</label><br>
+                <input type="text" name="userName" id="userName" value="$userName" class="form-control">
+            </p>
+            <p>
+                <label for="email">Favorite Email $emailError</label>
+                <input type="text" name="email" id="email" value="$email" class="form-control">
+            </p>
+            <div class="form-group"> 
+                <label for="instrument">Favorite Instrument - Pick 1 $instrumentError</label><br>
+                $instrumentList
+            </div>
+            <div class="form-group">
+                <label for="animals">Favorite Animals - Pick 2 $animalError</label><br>
+                $animalList
+            </div>
+            <div class="form-group"> 
+                <label for="activity">Favorite Activity $activityError</label><br>
+                <select name="activity" id="activity" class="form-control">
+                    <option value="">&larr; Please Select an Activty &rarr;</option>
+                    $activityList
+                </select> 
+            </div>
+            <p class="form-group">
+                <button type="submit" name="submit" value="Submit" class="btn">Submit</button>
+            </p>
+        </form>
+    </fieldset>
+HERE;
+
+$pageTitle = "Form Validation";
+include 'template.php';
 
 ?>
 
@@ -113,58 +200,7 @@ if (isset($_POST['submit'])) {
             <section>
                 <h2>Practice Form</h2>
                     <p>Please make your selections from the form below.</p>
-                    <fieldset class="pl-2">
-                        <legend> Sample Form </legend>
-                        <form method="post" action="form-validation.php">
-                            <p>
-                                <label for="userName">Name</label><br>
-                                <input type="text" name="userName" id="userName" value="" class="form-control">
-                            </p>
-                            <p>
-                                <label for="email">Favorite Email </label>
-                                <input type="text" name="email" id="email" value="" class="form-control">
-                            </p>
-                            <div class="form-group"> 
-                                <label for="instrument">Favorite Instrument - Pick 1 </label><br>
-                                <input type="radio" name="instrument" id="Guitar" value="Guitar" >
-                                <label for="Guitar">Guitar</label>&emsp;
-                                <input type="radio" name="instrument" id="Violin" value="Violin" >
-                                <label for="Violin">Violin</label>&emsp;
-                                <input type="radio" name="instrument" id="Piano" value="Piano" >
-                                <label for="Piano">Piano</label>&emsp;
-                                <input type="radio" name="instrument" id="Saxaphone" value="Saxaphone" >
-                                <label for="Saxaphone">Saxaphone</label>&emsp;
-
-                            </div>
-                            <div class="form-group">
-                                <label for="animals">Favorite Animals - Pick 2 </label><br>
-                                <input type="checkbox" name="animals[0]" id="0" value="Dogs" >
-                                <label for="0">Dogs</label>&emsp;
-                                <input type="checkbox" name="animals[1]" id="1" value="Cats" >
-                                <label for="1">Cats</label>&emsp;
-                                <input type="checkbox" name="animals[2]" id="2" value="Snakes" >
-                                <label for="2">Snakes</label>&emsp;
-                                <input type="checkbox" name="animals[3]" id="3" value="Rabbits" >
-                                <label for="3">Rabbits</label>&emsp;
-
-                            </div>
-                            <div class="form-group"> 
-                                <label for="activity">Favorite Activity </label><br>
-                                <select name="activity" id="activity" class="form-control">
-                                    <option value="">&larr; Please Select an Activity &rarr;</option>
-                                    <option value="Tennis" >Tennis</option>
-                                    <option value="Fencing" >Fencing</option>
-                                    <option value="Hanafuda" >Hanafuda</option>
-                                    <option value="Mancala" >Mancala</option>
-                                    <option value="Chess" >Chess</option>
-
-                                </select> 
-                            </div>
-                            <p class="form-group">
-                                <button type="submit" name="submit" value="Submit" class="btn">Submit</button>
-                            </p>
-                        </form>
-                    </fieldset>
+                    <?php echo $pageContent ?>
             </section>
         </div>
     </body>
