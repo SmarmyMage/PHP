@@ -164,7 +164,6 @@ $pageContent = <<<HERE
 HERE;
 
 $pageTitle = "Form Validation";
-include 'template.php';
 
 ?>
 
@@ -200,7 +199,7 @@ include 'template.php';
             <section>
                 <h2>Practice Form</h2>
                     <p>Please make your selections from the form below.</p>
-                    <?php echo $pageContent ?>
+                    <?php print $pageContent ?>
             </section>
         </div>
     </body>
