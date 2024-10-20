@@ -1,7 +1,6 @@
 <?php
 
-$pageTitle = "Template";
-$pageContent = NULL;
+//$pageTitle = "Template";
 
 ?>
 
