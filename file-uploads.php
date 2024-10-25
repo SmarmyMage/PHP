@@ -153,7 +153,7 @@ if ($signedIn) {
 $pageContent .= <<<HERE
 <fieldset class="container pl-2">
     <legend> User Sign-In </legend>
-        <form method="post" action="file-uploads.php">
+        <form method="post" action="file-uploads.php" enctype="multipart/form-data">
         <div class="form-group">
 			<label for="firstName">First Name:</label>
 			<input type="text" name="firstName" id="firstName" value="$firstName" class="form-control"> $firstNameError
