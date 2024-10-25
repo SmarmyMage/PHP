@@ -11,9 +11,10 @@
    <body>
       <header>2024FA-ITSE-1306-21701-PHP Programming | Anthony Reyna</header>
       <nav>
-         <a href="index.php">Home</a>
+         <a href="index.php">Home</a> |
          <a href="array.php">Array</a> |
-         <a href="form.php">Form</a> |
+         <a href="form-validation.php">Form</a> |
+         <a href="file-uploads.php">Home</a>
       </nav>
     
       <?php echo $pageContent; ?>
