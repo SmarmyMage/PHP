@@ -17,8 +17,8 @@ $imageError = NULL;
 
 $fileInfo = NULL;
 $imageName = NULL;
-$valid = FALSE;
-$signedIn = NULL;
+$valid = TRUE;
+$signedIn = FALSE;
 $pageContent = NULL;
 $errMsg = NULL;
 
@@ -27,45 +27,45 @@ if (isset($_POST['submit'])) {
 
     $firstName = ucwords(htmlspecialchars($_POST['firstName']));
     if (empty($firstName)) {
-        $firstNameError = "<span class='error'>You must enter a name in this field.</span>";
+        $firstNameError = "<span class="error">You must enter a name in this field.</span>";
         $valid = FALSE;
     }
 
     $lastName = ucwords(htmlspecialchars($_POST['lastName']));
     if (empty($lastName)) {
-        $lastNameError = "<span class='error'>You must enter a name in this field.</span>";
+        $lastNameError = "<span class="error">You must enter a name in this field.</span>";
         $valid = FALSE;
     }
 
     $email = htmlspecialchars($_POST['email']);
     if (empty($_POST['email'])){
-        $emailError = "<span class='error'>You must enter an email in this field.</span>";
+        $emailError = "<span class="error">You must enter an email in this field.</span>";
         $valid = FALSE;
     }
   
     if (!preg_match('/[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}/', $email)) {
-        $emailFormatError = "<span class='error'>You must enter a valid email address.</span>";
+        $emailFormatError = "<span class="error">You must enter a valid email address.</span>";
         $valid = FALSE;
     }
     
     $password = trim($_POST['password']);
     if (empty($password)) {
-        $passwordError = "<span class='error'>You must enter a password in this field.</span>";
+        $passwordError = "<span class="error">You must enter a password in this field.</span>";
         $valid = FALSE;
     }
 
     $password2 = trim($_POST['password2']);
-    if (strcmp($password, $password2)) {
-        $passwordMismatch = "<span class='error'>Passwords do not match each other.</span>";
+    if (strcmp($password, $password2) ) {
+        $passwordMismatch = "<span class="error">Passwords do not match each other.</span>";
         $valid = FALSE;
     }
 
     $userName = strtolower(substr($firstname,0,1) . $lastName);
 
     if ($valid) {
-        $filetype = pathinfo($_FILES['profilePic']['name'],PATHINFO_EXTENSION);
-        if((($filetype = "gif") or ($filetype = "jpg") or ($filetype = "png")) and $_FILES['profilePic']['size'] < 300000) {
-            if($_FILES["profilePic"]["error"] > 0) {
+        $filetype = pathinfo($_FILES['profilePic']["name"],PATHINFO_EXTENSION);
+        if ((($filetype == "gif") or ($filetype == "jpg") or ($filetype == "png")) and $_FILES['profilePic']['size'] < 300000) {
+            if ($_FILES["profilePic"]["error"] > 0) {
                 $valid = FALSE;
                 $fileError = $_FILES["profilePic"]["error"];
                 $imageError = "<p class='error'>Return Code: $fileError<br>";
@@ -90,7 +90,7 @@ if (isset($_POST['submit'])) {
                         break;
                     }
                 } else {
-                    $imageName = $_FILES['profilePic']['name'];
+                    $imageName = $_FILES['profilePic']["name"];
                     $file = "uploads/$imageName";
                     $fileInfo = "<p>Upload: $imageName<br>";
                     $fileInfo .= "Type: " . $_FILES["profilePic"]["type"] . "<br>";
