@@ -129,7 +129,7 @@ $pageContent .= "</pre>";
     }
 
 $pageContent = <<<HERE
-<fieldset class="pl-2">
+<fieldset class="container pl-2">
     <legend> Sample Form </legend>
         <form method="post" action="form-validation.php">
             <p>
@@ -156,7 +156,7 @@ $pageContent = <<<HERE
                 </select> 
             </div>
             <p class="form-group">
-                <button type="submit" name="submit" value="Submit" class="btn">Submit</button>
+                <button type="submit" name="submit" value="Submit" class="btn btn-primary">Submit</button>
             </p>
     </form>
 </fieldset>

@@ -1,210 +1,184 @@
 <?php
-$userName = NULL;
+$pageTitle = "File Uploads";
+$firstName = NULL;
+$lastName = NULL;
 $email = NULL;
-$instrument = NULL;
-$instrumentList = NULL;
-$instrumentChecked = NULL;
-$animal = NULL;
-$animalList = NULL;
-$animal1 = $animal2 = NULL;
-$animalChecked = NULL;
-$activity = NULL;
-$activityList = NULL;
-$activityChecked = NULL;
+$userName = NULL;
+$password = NULL;
+$password2 = NULL;
 
-$userNameError = NULL;
+$firstNameError = NULL;
+$lastNameError = NULL;
 $emailError = NULL;
-$instrumentError = NULL;
-$animalError = NULL;
-$activityError = NULL;
+$emailFormatError = NULL;
+$passwordError = NULL;
+$passwordMismatch = NULL;
+$imageError = NULL;
 
-$valid = false;
-
-$instrumentArray = array('Guitar', 'Piano', 'Lyre', 'Flute');
-foreach ($instrumentArray as $instrumentName){
-    $instrumentChecked[$instrumentName] = NULL;
-}
-
-$animalArray = array('Dog', 'Cat', 'Snake', 'Rabbit');
-foreach ($animalArray as $animalIndex => $animalName){
-    $animalChecked[$animalIndex] = NULL;
-}
-
-$activityArray = array('Tennis', 'Fencing', 'Hanafuda', 'Mancala', 'Golf');
-foreach ($activityArray as $activityName){
-    $activityChecked[$activityName] = NULL;
-}
+$fileInfo = NULL;
+$imageName = NULL;
+$valid = FALSE;
+$signedIn = NULL;
+$pageContent = NULL;
+$errMsg = NULL;
 
 if (isset($_POST['submit'])) {
 	$valid = true;
 
-    if (empty($_POST['userName'])){
-        $userNameError = "<span class='error'>You must enter a user name.</span>";
-        $valid = false;
-    } else {
-        $userName = ucfirst(htmlspecialchars($_POST['userName']));
+    $firstName = ucfirst(htmlspecialchars($_POST['firstName']));
+    if (empty($firstName)) {
+        $firstNameError = "<span class='error'>You must enter a name in this field.</span>";
+        $valid = FALSE;
     }
 
+    $lastName = ucfirst(htmlspecialchars($_POST['lastName']));
+    if (empty($lastName)) {
+        $lastNameError = "<span class='error'>You must enter a name in this field.</span>";
+        $valid = FALSE;
+    }
+
+    $email = htmlspecialchars($_POST['email']);
     if (empty($_POST['email'])){
-        $emailError = "<span class='error'>You must enter an email.</span>";
-        $valid = false;
-    } else {
-        $email = trim($_POST['email']);
-        if (!preg_match('/[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}/', $email)) {
-            $emailError = "<span class='error'>You must enter a valid email address.</span>";
-            $valid = false;
-        }
+        $emailError = "<span class='error'>You must enter an email in this field.</span>";
+        $valid = FALSE;
+    }
+  
+    if (!preg_match('/[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}/', $email)) {
+        $emailFormatError = "<span class='error'>You must enter a valid email address.</span>";
+        $valid = FALSE;
+    }
+    
+    $password = trim($_POST('password'));
+    if (empty($password)) {
+        $passwordError = "<span class='error'>You must enter a password in this field.</span>";
+        $valid = FALSE;
     }
 
-    if (empty($_POST['instrument'])){
-        $userNameError = "<span class='error'>You must select an instrument.</span>";
-        $valid = false;
-    } else {
-        $instrument = $_POST['instrument'];
-        if (in_array($instrument, $instrumentArray)) {
-            $instrumentChecked[$instrument] = "checked";
-        }
+    $password2 = trim($_POST('password2'));
+    if (strcmp($password, $password2)) {
+        $passwordMismatch = "<span class='error'>Passwords do not match each other.</span>";
+        $valid = FALSE;
     }
 
-    if (isset($_POST['animal'])){
-        $countAnimal = COUNT($_POST['animal']);
-        foreach ($_POST['animal'] as $index => $animal) {
-            $selectedAnimal[] = $animal;
-            if (in_array($animal, $animalArray)) {
-                $animalChecked[$index] = "checked";
-            }
-        }
-        if($countAnimal == 2){
-            $animal1 = $selectedAnimal[0];
-            $animal2 = $selectedAnimal[1];
+    $userName = strtolower(substr($firstname,0,1) . $lastName);
+
+    if ($valid) {
+        $filetype = pathinfo($_FILES['profilePic']['name'], PATHINFO_EXTENSION);
+        if((($filetype = "gif") or ($filetype = "jpg") or ($filetype = "png")) and $_FILES['profilePic']['size'] < 300000) {
+            if($_FILES["profilePic"]["error"] > 0) {
+                $valid = FALSE;
+                $fileError = $_FILES["profilePic"]["error"];
+                $imageError = "<p class='error'>Return Code: $fileError<br>";
+                switch ($fileError) {
+                    case 1:
+                        $imageError .= 'The file exceeds the upload_max_filesize setting in php.ini.</p>';
+                        break;
+                    case 2:
+                        $imageError .= 'The file exceeds the MAX_FILE_SIZE setting in HTML form.</p>';
+                        break;
+                    case 3:
+                        $imageError .= 'The file the file was only partially uploaded.</p>';
+                        break;
+                    case 4:
+                        $imageError .= 'No file was uploaded.</p>';
+                        break;
+                    case 5:
+                        $imageError .= 'The temporary folder does not exist.</p>';
+                        break;
+                    default:
+                        $imageError .= 'Something unexpected happened.</p>';
+                        break;
+                    }
+                } else {
+                    $imageName = $_FILES['profilePic']['name'];
+                    $file = "uploads/$imageName";
+                    $fileInfo = "<p>Upload: $imageName<br>";
+                    $fileInfo .= "Type: " . $_FILES["profilePic"]["type"] . "<br>";
+                    $fileInfo .= "Size: " . ($_FILES["profilePic"]["size"] / 1024) . " Kb<br>";
+                    $fileInfo .= "Temp file: " . $_FILES["profilePic"]["tmp_name"] . "</p>";
+                    if (file_exists($file)) {
+                        $imageError = "<span class='error'>$imageName already exists.</span>";
+                    } else {
+                        if (move_upload_file($_FILES["profilePic"]["tmp_name"], $file)) {
+                            $fileInfo .= "<p>Your file has been uploaded. Saved as $file.</p>";
+
+                            $fileName = "membership.txt";
+                            $dataEntry = $firstName . "," . $lastName . "," . $email . "," . $userName . "," . $password . "\n";
+                            $fp = fopen($fileName, "a") or die ("Couldn't open file.");
+                            if (fwrite($fp, $dataEntry) > 0) {
+                                $fp = fclose($fp);
+                                $signedIn = TRUE;
+                            } else {
+                                $fp = fclose($fp);
+                                $errMsg = "Your information was not saved. Please try again later.<br>"
+                            }
+                        } else {
+                            $imageError .= "<p><span class='error'>Your file could not be uploaded. $fileInfo</span></p>"
+                        }
+                    }
+                }
         } else {
-            $animalError = "<span class='error'>You must select only two(2) animals.</span>";
-            $valid = false;
-        }
-    } else {
-        $animalError = "<span class='error'>You must select two(2) animals.</span>";
-            $valid = false;
-    }
-
-    if (empty($_POST['activity'])){
-        $activityError = "<span class='error'>You must select an activity.</span>";
-        $valid = false;
-    } else {
-        $activity = $_POST['activity'];
-        if (in_array($activity, $activityArray)) {
-            $activityChecked[$activity] = "selected";
+            $imageError .= "<p><span class='error'>Invalid file. This is not an image.</span></p>"
         }
     }
 }
-	if ($valid) {
-        $pageContent = <<<HERE
-        <h2> Hello $userName!</h2>
-        <p>Your email is $email.<br>
-        Your favorite instrument is $instrument.<br>
-        Your favorite animals are $animal1 and $animal2.<br>
-        Your facorite activity is $activity.</p>
-        HERE;
 
-$pageContent .= "<pre>";
-$pageContent .= print_r($_POST, true);
-$pageContent .= "</pre>";
+if ($signedIn) {
+    $poem = "poem.txt";
+    $fp = fopen($poem, "r") or die ("Couldn't open file.");
+    if (!feof($fp)) {
+        $poemText = fgets($fp);
+    } else {
+        $pageContent .= "Your information was not found. Please try again later.<br>";
+    }
+    $fp = fclose($fp);
 
+    $pageContent = <<<HERE
+    <section class="container pl-2">
+        $errMsg
+        <p>Thank you, $firstName $lastName.</p>
+        <figure><img src="$file" alt="Profile Image" class="profilePic" />
+        <figcaption>Member: $firstName $lastName</figcaption>
+        </figure>
+        <p>Email: $email</p>
+        <p>You are now signed into our system. We hope you enjoy the site.</p>
+        <p>Your information is now saved. Use the username provided below for future logins.</p>
+        <p>Username: <strong>$userName</strong></p>
+        <p><a href="file-uploads.php>Page Reload</p>
+        <h2>A Poem You Might Enjoy: </h2>
+        <p>$poemText</p>
+    </section>\n
+    HERE;
 } else {
-    foreach ($instrumentArray as $instrumentName) {
-        $instrumentList .= <<<HERE
-        <input type="radio" name="instrument" id="$instrumentName" value="$instrumentName" $instrumentChecked>
-        <label for="$instrumentName">$instrumentName</label>&emsp;\n
-    HERE;
-    }
-    foreach ($animalArray as $animalIndex => $animalName) {
-        $animalList .= <<<HERE
-        <input type="checkbox" name="animal[$animalName]" id="$animalIndex" value="$animalName" $animalChecked>
-        <label for="$animalIndex">$animalName</label>&emsp;\n
-    HERE;
-    }
-    foreach ($activityArray as $activityName) {
-        $activityList .= <<<HERE
-        <option value="$activityName" $activityChecked[$activityName]>$activityName</option>\n
-    HERE;
-    }
-
 $pageContent = <<<HERE
-<fieldset class="pl-2">
-    <legend> Sample Form </legend>
-        <form method="post" action="form-validation.php">
-            <p>
-                <label for="userName">Name $userNameError</label><br>
-                <input type="text" name="userName" id="userName" value="$userName" class="form-control">
-            </p>
-            <p>
-                <label for="email">Favorite Email $emailError</label>
-                <input type="text" name="email" id="email" value="$email" class="form-control">
-            </p>
-            <div class="form-group"> 
-                <label for="instrument">Favorite Instrument - Pick 1 $instrumentError</label><br>
-                $instrumentList
-            </div>
-            <div class="form-group">
-                <label for="animals">Favorite Animals - Pick 2 $animalError</label><br>
-                $animalList
-            </div>
-            <div class="form-group"> 
-                <label for="activity">Favorite Activity $activityError</label><br>
-                <select name="activity" id="activity" class="form-control">
-                    <option value="">&larr; Please Select an Activty &rarr;</option>
-                    $activityList
-                </select> 
-            </div>
-            <p class="form-group">
-                <button type="submit" name="submit" value="Submit" class="btn">Submit</button>
-            </p>
+<fieldset class="container pl-2">
+    <legend> User Sign-In </legend>
+        <form method="post" action="file-uploads.php">
+        <div class="form-group">
+			<label for="firstName">First Name:</label>
+			<input type="text" name="firstName" id="firstName" value="$firstName" class="form-control"> $firstNameError
+		</div>
+		<div class="form-group">
+			<label for="lastName">Last Name:</label>
+			<input type="text" name="lastName" id="lastName" value="$lastName" class="form-control"> $lastNameError
+		</div>
+		<div class="form-group">
+			<label for="email">Email:</label>
+			<input type="text" name="email" id="email" value="$email" class="form-control"> $emailError $emailFormantError
+		</div>
+		<p>Please select an image for your profile.</p>
+		<div class="form-group">
+			<input type="hidden" name="MAX_FILE_SIZE" value="100000">
+			<label for="profilePic">File to Upload:</label> $imageError
+			<input type="file" name="profilePic" id="profilePic" class="form-control">
+		</div>
+		<div class="form-group">
+			<input type="submit" name="submit" value="Submit Profile" class="btn btn-primary">
+		</div>
     </form>
 </fieldset>
 HERE;
 }
 
-$pageTitle = "Form Validation";
 include 'template.php';
 ?>
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-      <title></title>
-   </head>
-
-   <body>
-      <header>2024FA-ITSE-1306-21701-PHP Programming | Anthony Reyna</header>
-      <nav>
-         <a href="index.php">Home</a>
-         <a href="array.php">Array</a> |
-         <a href="form.php">Form</a> |
-         <a href="invoice.php">Invoice</a>
-      </nav>
-    
-      <div class="container">
-
-            <header>
-                <h1>Form Validation</h1>
-            </header>
-
-            <nav>
-                <a href="index.php">Home</a> | <a href="form.php">Order Form</a>
-            </nav>
-
-            <section>
-                <h2>Practice Form</h2>
-                    <p>Please make your selections from the form below.</p>
-            </section>
-        </div>
-    </body>
-
-   <footer>
-        <p>&copy; Anthony Reyna, MyWebTraining, 2024</p>
-   </footer>
-
-</html> -->
