@@ -25,13 +25,13 @@ $errMsg = NULL;
 if (isset($_POST['submit'])) {
 	$valid = true;
 
-    $firstName = ucfirst(htmlspecialchars($_POST['firstName']));
+    $firstName = ucwords(htmlspecialchars($_POST['firstName']));
     if (empty($firstName)) {
         $firstNameError = "<span class='error'>You must enter a name in this field.</span>";
         $valid = FALSE;
     }
 
-    $lastName = ucfirst(htmlspecialchars($_POST['lastName']));
+    $lastName = ucwords(htmlspecialchars($_POST['lastName']));
     if (empty($lastName)) {
         $lastNameError = "<span class='error'>You must enter a name in this field.</span>";
         $valid = FALSE;
@@ -48,13 +48,13 @@ if (isset($_POST['submit'])) {
         $valid = FALSE;
     }
     
-    $password = trim($_POST('password'));
+    $password = trim($_POST['password']);
     if (empty($password)) {
         $passwordError = "<span class='error'>You must enter a password in this field.</span>";
         $valid = FALSE;
     }
 
-    $password2 = trim($_POST('password2'));
+    $password2 = trim($_POST['password2']);
     if (strcmp($password, $password2)) {
         $passwordMismatch = "<span class='error'>Passwords do not match each other.</span>";
         $valid = FALSE;
@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
     $userName = strtolower(substr($firstname,0,1) . $lastName);
 
     if ($valid) {
-        $filetype = pathinfo($_FILES['profilePic']['name'], PATHINFO_EXTENSION);
+        $filetype = pathinfo($_FILES['profilePic']['name'],PATHINFO_EXTENSION);
         if((($filetype = "gif") or ($filetype = "jpg") or ($filetype = "png")) and $_FILES['profilePic']['size'] < 300000) {
             if($_FILES["profilePic"]["error"] > 0) {
                 $valid = FALSE;
@@ -133,7 +133,7 @@ if ($signedIn) {
     }
     $fp = fclose($fp);
 
-    $pageContent = <<<HERE
+    $pageContent .= <<<HERE
     <section class="container pl-2">
         $errMsg
         <p>Thank you, $firstName $lastName.</p>
@@ -150,7 +150,7 @@ if ($signedIn) {
     </section>\n
     HERE;
 } else {
-$pageContent = <<<HERE
+$pageContent .= <<<HERE
 <fieldset class="container pl-2">
     <legend> User Sign-In </legend>
         <form method="post" action="file-uploads.php">
@@ -166,9 +166,17 @@ $pageContent = <<<HERE
 			<label for="email">Email:</label>
 			<input type="text" name="email" id="email" value="$email" class="form-control"> $emailError $emailFormantError
 		</div>
+        <div class="form-group">
+			<label for="password">Password:</label>
+			<input type="text" name="password" id="password" value="$password" class="form-control"> $passwordError
+		</div>
+        <div class="form-group">
+			<label for="password2">Verify Password:</label>
+			<input type="text" name="password2" id="password2" value="$password2" class="form-control"> $password2Error
+		</div>
 		<p>Please select an image for your profile.</p>
 		<div class="form-group">
-			<input type="hidden" name="MAX_FILE_SIZE" value="100000">
+			<input type="hidden" name="MAX_FILE_SIZE" value="300000">
 			<label for="profilePic">File to Upload:</label> $imageError
 			<input type="file" name="profilePic" id="profilePic" class="form-control">
 		</div>
