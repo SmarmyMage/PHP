@@ -133,7 +133,7 @@ if ($signedIn) {
     }
     $fp = fclose($fp);
 
-    $pageContent .= <<<HERE
+    $pageContent = <<<HERE
     <section class="container pl-2">
         $errMsg
         <p>Thank you, $firstName $lastName.</p>
@@ -150,7 +150,7 @@ if ($signedIn) {
     </section>\n
     HERE;
 } else {
-$pageContent .= <<<HERE
+$pageContent = <<<HERE
 <fieldset class="container pl-2">
     <legend> User Sign-In </legend>
         <form method="post" action="file-uploads.php" enctype="multipart/form-data">
