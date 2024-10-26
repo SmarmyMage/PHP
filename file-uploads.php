@@ -188,5 +188,7 @@ $pageContent .= <<<HERE
 HERE;
 }
 
+var_dump($pageContent);
+
 include 'template.php';
 ?>
