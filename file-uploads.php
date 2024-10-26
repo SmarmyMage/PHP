@@ -189,5 +189,7 @@ $pageContent .= <<<HERE
 HERE;
 }
 
+echo "Hello!";
+
 include 'template.php';
 ?>
