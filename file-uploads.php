@@ -19,7 +19,6 @@ $fileInfo = NULL;
 $imageName = NULL;
 $valid = TRUE;
 $signedIn = FALSE;
-$pageContent = NULL;
 $errMsg = NULL;
 
 if (isset($_POST['submit'])) {
@@ -133,7 +132,7 @@ if ($signedIn) {
     }
     $fp = fclose($fp);
 
-    $pageContent .= <<<HERE
+    $pageContent = <<<HERE
     <section class="container pl-2">
         $errMsg
         <p>Thank you, $firstName $lastName.</p>
@@ -150,7 +149,7 @@ if ($signedIn) {
     </section>\n
     HERE;
 } else {
-$pageContent .= <<<HERE
+$pageContent = <<<HERE
 <fieldset class="container pl-2">
     $errMsg
     <p>User Sign-In</p>
@@ -188,8 +187,6 @@ $pageContent .= <<<HERE
 </fieldset>
 HERE;
 }
-
-echo "Hello!";
 
 include 'template.php';
 ?>
