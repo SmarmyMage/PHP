@@ -19,11 +19,10 @@ $fileInfo = NULL;
 $imageName = NULL;
 $valid = TRUE;
 $signedIn = FALSE;
+$pageContent = NULL;
 $errMsg = NULL;
 
 if (isset($_POST['submit'])) {
-	$valid = true;
-
     $firstName = ucwords(htmlspecialchars($_POST['firstName']));
     if (empty($firstName)) {
         $firstNameError = "<span class='error'>You must enter a name in this field.</span>";
@@ -62,11 +61,11 @@ if (isset($_POST['submit'])) {
     $userName = strtolower(substr($firstname,0,1) . $lastName);
 
     if ($valid) {
-        $filetype = pathinfo($_FILES['profilePic']["name"],PATHINFO_EXTENSION);
+        $filetype = pathinfo($_FILES['profilePic']['name'],PATHINFO_EXTENSION);
         if ((($filetype == "gif") or ($filetype == "jpg") or ($filetype == "png")) and $_FILES['profilePic']['size'] < 300000) {
             if ($_FILES["profilePic"]['error'] > 0) {
                 $valid = FALSE;
-                $fileError = $_FILES["profilePic"]['error'];
+                $fileError = $_FILES["profilePic"]["error"];
                 $imageError = "<p class='error'>Return Code: $fileError<br>";
                 switch ($fileError) {
                     case 1:
@@ -81,7 +80,7 @@ if (isset($_POST['submit'])) {
                     case 4:
                         $imageError .= 'No file was uploaded.</p>';
                         break;
-                    case 5:
+                    case 6:
                         $imageError .= 'The temporary folder does not exist.</p>';
                         break;
                     default:
@@ -89,7 +88,7 @@ if (isset($_POST['submit'])) {
                         break;
                     }
                 } else {
-                    $imageName = $_FILES['profilePic']["name"];
+                    $imageName = $_FILES["profilePic"]["name"];
                     $file = "uploads/$imageName";
                     $fileInfo = "<p>Upload: $imageName<br>";
                     $fileInfo .= "Type: " . $_FILES["profilePic"]["type"] . "<br>";
@@ -98,7 +97,7 @@ if (isset($_POST['submit'])) {
                     if (file_exists($file)) {
                         $imageError = "<span class='error'>$imageName already exists.</span>";
                     } else {
-                        if (move_upload_file($_FILES["profilePic"]["tmp_name"], $file)) {
+                        if (move_upload_file($_FILES['profilePic']['tmp_name'], $file)) {
                             $fileInfo .= "<p>Your file has been uploaded. Saved as $file.</p>";
 
                             $fileName = "membership.txt";
@@ -132,7 +131,7 @@ if ($signedIn) {
     }
     $fp = fclose($fp);
 
-    $pageContent = <<<HERE
+    $pageContent .= <<<HERE
     <section class="container pl-2">
         $errMsg
         <p>Thank you, $firstName $lastName.</p>
@@ -143,48 +142,49 @@ if ($signedIn) {
         <p>You are now signed into our system. We hope you enjoy the site.</p>
         <p>Your information is now saved. Use the username provided below for future logins.</p>
         <p>Username: <strong>$userName</strong></p>
-        <p><a href="file-uploads.php>Page Reload</p>
+        <p><a href="file-uploads.php>Page Reload</a></p>
         <h2>A Poem You Might Enjoy: </h2>
         <p>$poemText</p>
     </section>\n
     HERE;
 } else {
-$pageContent = <<<HERE
-<fieldset class="container pl-2">
+$pageContent .= <<<HERE
+<section class="container pl-2">
     $errMsg
     <p>User Sign-In</p>
         <form action="file-uploads.php" enctype="multipart/form-data" method="post">
-        <div class="form-group">
-			<label for="firstName">First Name:</label>
-			<input type="text" name="firstName" id="firstName" value="$firstName" class="form-control"> $firstNameError
-		</div>
-		<div class="form-group">
-			<label for="lastName">Last Name:</label>
-			<input type="text" name="lastName" id="lastName" value="$lastName" class="form-control"> $lastNameError
-		</div>
-		<div class="form-group">
-			<label for="email">Email:</label>
-			<input type="text" name="email" id="email" value="$email" class="form-control"> $emailError $emailFormantError
-		</div>
-        <div class="form-group">
-			<label for="password">Password:</label>
-			<input type="text" name="password" id="password" value="" class="form-control"> $passwordError
-		</div>
-        <div class="form-group">
-			<label for="password2">Verify Password:</label>
-			<input type="text" name="password2" id="password2" value="" class="form-control"> $password2Error
-		</div>
-		<p>Please select an image for your profile.</p>
-		<div class="form-group">
-			<input type="hidden" name="MAX_FILE_SIZE" value="300000">
-			<label for="profilePic">File to Upload:</label> $imageError
-			<input type="file" name="profilePic" id="profilePic" class="form-control">
-		</div>
-		<div class="form-group">
-			<input type="submit" name="submit" value="Submit Profile" class="btn btn-primary">
-		</div>
-    </form>
-</fieldset>
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" name="firstName" id="firstName" value="$firstName" class="form-control"> $firstNameError
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" name="lastName" id="lastName" value="$lastName" class="form-control"> $lastNameError
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" name="email" id="email" value="$email" class="form-control"> $emailError $emailFormantError
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="text" name="password" id="password" value="" class="form-control"> $passwordError
+            </div>
+            <div class="form-group">
+                <label for="password2">Verify Password:</label>
+                <input type="text" name="password2" id="password2" value="" class="form-control"> $passwordMismatch
+            </div>
+            <p>Please select an image for your profile.</p>
+            <div class="form-group">
+                <input type="hidden" name="MAX_FILE_SIZE" value="300000">
+                <label for="profilePic">File to Upload:</label> $imageError
+                <input type="file" name="profilePic" id="profilePic" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="submit" name="submit" value="Submit Profile" class="btn btn-primary">
+                <input type="submit" name="reset" value="Reset Profile" class="btn btn-primary">
+            </div>
+        </form>
+</section>\n
 HERE;
 }
 
