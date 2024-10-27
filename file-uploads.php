@@ -186,9 +186,7 @@ $pageContent .= <<<HERE
         </form>
 </section>\n
 HERE;
-}
-
-var_dump($pageContent);
+}  
 
 include 'template.php';
 ?>
