@@ -88,35 +88,35 @@ if (isset($_POST['submit'])) {
                         break;
                     }
                 } else {
-                    $imageName = $_FILES["profilePic"]["name"];
-                    $file = "uploads/$imageName";
-                    $fileInfo = "<p>Upload: $imageName<br>";
-                    $fileInfo .= "Type: " . $_FILES["profilePic"]["type"] . "<br>";
-                    $fileInfo .= "Size: " . ($_FILES["profilePic"]["size"] / 1024) . " Kb<br>";
-                    $fileInfo .= "Temp file: " . $_FILES["profilePic"]["tmp_name"] . "</p>";
-                    if (file_exists($file)) {
-                        $imageError = "<span class='error'>$imageName already exists.</span>";
-                    } else {
-                        if (move_upload_file($_FILES['profilePic']['tmp_name'], $file)) {
-                            $fileInfo .= "<p>Your file has been uploaded. Saved as $file.</p>";
-
-                            $fileName = "membership.txt";
-                            $dataEntry = $firstName . "," . $lastName . "," . $email . "," . $userName . "," . $password . "\n";
-                            $fp = fopen($fileName, "a") or die ("Couldn't open file.");
-                            if (fwrite($fp, $dataEntry) > 0) {
-                                $fp = fclose($fp);
-                                $signedIn = TRUE;
-                            } else {
-                                $fp = fclose($fp);
-                                $errMsg = "Your information was not saved. Please try again later.<br>"
-                            }
+                        $imageName = $_FILES["profilePic"]["name"];
+                        $file = "uploads/$imageName";
+                        $fileInfo = "<p>Upload: $imageName<br>";
+                        $fileInfo .= "Type: " . $_FILES["profilePic"]["type"] . "<br>";
+                        $fileInfo .= "Size: " . ($_FILES["profilePic"]["size"] / 1024) . " Kb<br>";
+                        $fileInfo .= "Temp file: " . $_FILES["profilePic"]["tmp_name"] . "</p>";
+                        if (file_exists($file)) {
+                            $imageError = "<span class='error'>$imageName already exists.</span>";
                         } else {
-                            $imageError .= "<p><span class='error'>Your file could not be uploaded. $fileInfo</span></p>"
-                        }
-                    }
-                }
-        } else {
-            $imageError .= "<p><span class='error'>Invalid file. This is not an image.</span></p>"
+                            if (move_upload_file($_FILES['profilePic']['tmp_name'], $file)) {
+                                $fileInfo .= "<p>Your file has been uploaded. Saved as $file.</p>";
+
+                                $fileName = "membership.txt";
+                                $dataEntry = $firstName . "," . $lastName . "," . $email . "," . $userName . "," . $password . "\n";
+                                $fp = fopen($fileName, "a") or die ("Couldn't open file.");
+                                if (fwrite($fp, $dataEntry) > 0) {
+                                    $fp = fclose($fp);
+                                    $signedIn = TRUE;
+                                } else {
+                                    $fp = fclose($fp);
+                                    $errMsg = "Your information was not saved. Please try again later.<br>";
+                                }
+                            } else {
+                                $imageError .= "<p><span class='error'>Your file could not be uploaded. $fileInfo</span></p>";
+                        } 
+                    } 
+                } 
+            } else {
+            $imageError .= "<p><span class='error'>Invalid file. This is not an image.</span></p>";
         }
     }
 }
