@@ -142,6 +142,40 @@ HERE;
 HERE;
 }
 
+$spring = 3;
+$summer = 6;
+$autumn = 9;
+
+if ($month >= $autumn) {
+    $seasonContent .= <<<HERE
+    <figure>
+        <img src='images/autumn.jpg' alt="Autumn Image">
+        <figcaption>...and it is currently autumn.</figcaption>
+    </figure>
+    HERE;
+} else if ($month >= $summer) {
+    $seasonContent .= <<<HERE
+    <figure>
+        <img src='images/summer.jpg' alt="Summer Image">
+        <figcaption>...and it is currently summer.</figcaption>
+    </figure>
+    HERE;
+} else if ($month >= $spring) {
+    $seasonContent .= <<<HERE
+    <figure>
+        <img src='images/spring.jpg' alt="Spring Image">
+        <figcaption>...and it is currently spring.</figcaption>
+    </figure>
+    HERE;
+} else {
+    $seasonContent .= <<<HERE
+    <figure>
+        <img src='images/winter.jpg' alt="Winter Image">
+        <figcaption>...and it is currently winter.</figcaption>
+    </figure>
+    HERE;
+}
+
 $day1 = Date('z',strtotime("February 14"));
 $day2 = date('z', $today);
 if ($day1 == $day2) {
