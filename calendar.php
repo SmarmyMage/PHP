@@ -41,7 +41,7 @@ if($ampm == 'PM') {
     $amChecked = "checked";
 }
 
-$today = mktime($hour,$minute,$second,$month,$day,$year);
+$today = mktime($hours,$minutes,$seconds,$month,$day,$year);
 
 $timeForm = <<<HERE
 <p>You can enter another time here and show the results below.</p>
@@ -69,12 +69,12 @@ foreach ($monthSelect as $key => $value) {
 }
 $dayList = NULL;
 for ($i=1; $i<=31; $i++) {
-    if($i == day) {
+    if($i == $day) {
         $dayList .= <<<HERE
         <option value="$i" selected>$i</option>\n
     HERE;
     } else {
-        if($i == day)
+        if($i == $day)
             $dayList .= <<<HERE
             <option value="$i">$i</option>\n
         HERE;
@@ -197,6 +197,5 @@ $pageContent .= $postArray;
 $pageContent .= $hours;
 
 $pageTitle = "My Calendar";
-include 'template.php'
-
+include 'template.php';
 ?>
