@@ -54,7 +54,8 @@ $timeForm = <<<HERE
 <input type="submit" name="reset" value="Show Current Time">
 HERE;
 
-$monthSelect = array(1 => 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+$monthSelect = array(1 => 'January', 'February', 'March', 'April', 'May', 
+'June', 'July', 'August', 'September', 'October', 'November', 'December');
 $monthList = NULL;
 foreach ($monthSelect as $key => $value) {
     if($key == $month) {
@@ -74,10 +75,9 @@ for ($i=1; $i<=31; $i++) {
         <option value="$i" selected>$i</option>\n
     HERE;
     } else {
-        if($i == $day)
             $dayList .= <<<HERE
             <option value="$i">$i</option>\n
-        HERE;
+    HERE;
     }
 }
 $yearList = NULL;
@@ -155,7 +155,7 @@ HERE;
     $diff = $day1 - $day2;
     $holidayContent .= <<<HERE
     <figure>
-        <img src='holiday.jpg' alt="Holiday Image">
+        <img src='images/holiday.jpg' alt="Holiday Image">
         <figcaption>There are $diff day(s) until Valentine's Day.</figcaption>
     </figure>
 HERE;
@@ -165,7 +165,7 @@ HERE;
     $diff = ($day4 - $day2) + $day3;
     $holidayContent .= <<<HERE
     <figure>
-        <img src='holiday.jpg' alt="Holiday Image">
+        <img src='images/holiday.jpg' alt="Holiday Image">
         <figcaption>There are $diff day(s) until next Valentine's Day.</figcaption>
     </figure>
     HERE;
