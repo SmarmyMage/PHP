@@ -41,7 +41,7 @@ if($ampm == 'PM') {
     $amChecked = "checked";
 }
 
-$today = mktime(hour,minute,second,month,day,year,is_dst);
+$today = mktime($hour,$minute,$second,$month,$day,$year);
 
 $timeForm = <<<HERE
 <p>You can enter another time here and show the results below.</p>
