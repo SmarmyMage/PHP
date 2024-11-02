@@ -160,18 +160,11 @@ if ($month >= $autumn) {
         <figcaption>...and it is currently summer.</figcaption>
     </figure>
     HERE;
-} else if ($month >= $spring) {
+} else {
     $seasonContent .= <<<HERE
     <figure>
         <img src='images/spring.jpg' alt="Spring Image">
         <figcaption>...and it is currently spring.</figcaption>
-    </figure>
-    HERE;
-} else {
-    $seasonContent .= <<<HERE
-    <figure>
-        <img src='images/winter.jpg' alt="Winter Image">
-        <figcaption>...and it is currently winter.</figcaption>
     </figure>
     HERE;
 }
