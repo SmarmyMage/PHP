@@ -45,7 +45,7 @@ $today = mktime($hours,$minutes,$seconds,$month,$day,$year);
 
 $timeForm = <<<HERE
 <p>You can enter another time here and show the results below.</p>
-<form method="post>
+<form method="post">
 <input type="number" name="hours" value="$displayHours" placeholder="HH" size="3" min="1" max="12">
 <input type="number" name="minutes" value="$minutes" placeholder="MM" size="3" min="0" max="59">
 <label><input type="radio" name="ampm" value="AM" $amChecked>&nbsp;AM</label>
