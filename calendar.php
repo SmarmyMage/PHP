@@ -142,7 +142,6 @@ HERE;
 HERE;
 }
 
-$spring = 3;
 $summer = 6;
 $autumn = 9;
 
@@ -152,21 +151,21 @@ if ($month >= $autumn) {
         <img src='images/autumn.jpg' alt="Autumn Image">
         <figcaption>...and it is currently autumn.</figcaption>
     </figure>
-    HERE;
+HERE;
 } else if ($month >= $summer) {
     $seasonContent .= <<<HERE
     <figure>
         <img src='images/summer.jpg' alt="Summer Image">
         <figcaption>...and it is currently summer.</figcaption>
     </figure>
-    HERE;
+HERE;
 } else {
     $seasonContent .= <<<HERE
     <figure>
         <img src='images/spring.jpg' alt="Spring Image">
         <figcaption>...and it is currently spring.</figcaption>
     </figure>
-    HERE;
+HERE;
 }
 
 $day1 = Date('z',strtotime("February 14"));
