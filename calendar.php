@@ -178,7 +178,7 @@ if ($day1 == $day2) {
         <figcaption>Happy Valentine's Day!</figcaption>
     </figure>
 HERE;
-} elseif ($day1 > $day2) {
+} else if ($day1 > $day2) {
     $diff = $day1 - $day2;
     $holidayContent .= <<<HERE
     <figure>
@@ -195,7 +195,7 @@ HERE;
         <img src='images/holiday.jpg' alt="Holiday Image">
         <figcaption>There are $diff day(s) until next Valentine's Day.</figcaption>
     </figure>
-    HERE;
+HERE;
 }
 
 $pageContent .= <<<HERE
