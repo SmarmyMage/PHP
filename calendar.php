@@ -201,13 +201,13 @@ $pageContent .= <<<HERE
 $dateContent
 <div class="container">
     <div class="row>
-        <div class="col-md>
+        <div class="col-md">
             $timeContent
         </div>
-        <div class="col-md>
+        <div class="col-md">
             $seasonContent
         </div>
-        <div class="col-md>
+        <div class="col-md">
             $holidayContent
         </div>
     </div>
