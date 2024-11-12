@@ -1,5 +1,7 @@
 <?php
-$pageTitle = "File Uploads";
+include_once 'config.php';
+
+$pageTitle = "Register";
 $firstName = NULL;
 $lastName = NULL;
 $email = NULL;
@@ -22,22 +24,24 @@ $signedIn = FALSE;
 $pageContent = NULL;
 $errMsg = NULL;
 
-include_once 'config.php';
 
 if (isset($_POST['submit'])) {
-    $firstName = ucwords(htmlspecialchars($_POST['firstName']));
+//  $firstName = ucwords(htmlspecialchars($_POST['firstName']));
+    $firstName = mysqli_real_escape_string($conn, trim($_POST['firstName']));
     if (empty($firstName)) {
         $firstNameError = "<span class='error'>You must enter a name in this field.</span>";
         $valid = FALSE;
     }
 
-    $lastName = ucwords(htmlspecialchars($_POST['lastName']));
+    // $lastName = ucwords(htmlspecialchars($_POST['lastName']));
+    $lastName = mysqli_real_escape_string($conn, trim($_POST['lastName']));
     if (empty($lastName)) {
         $lastNameError = "<span class='error'>You must enter a name in this field.</span>";
         $valid = FALSE;
     }
 
-    $email = htmlspecialchars($_POST['email']);
+    // $email = htmlspecialchars($_POST['email']);
+    $email = mysqli_real_escape_string($conn, trim($_POST['email']));
     if (empty($_POST['email'])){
         $emailError = "<span class='error'>You must enter an email in this field.</span>";
         $valid = FALSE;
@@ -102,16 +106,25 @@ if (isset($_POST['submit'])) {
                             if (move_upload_file($_FILES['profilePic']['tmp_name'], $file)) {
                                 $fileInfo .= "<p>Your file has been uploaded. Saved as $file.</p>";
 
-                                $fileName = "membership.txt";
-                                $dataEntry = $firstName . "," . $lastName . "," . $email . "," . $userName . "," . $password . "\n";
-                                $fp = fopen($fileName, "a") or die ("Couldn't open file.");
-                                if (fwrite($fp, $dataEntry) > 0) {
-                                    $fp = fclose($fp);
-                                    $signedIn = TRUE;
-                                } else {
-                                    $fp = fclose($fp);
-                                    $errMsg = "Your information was not saved. Please try again later.<br>";
+                                if (!$conn) {
+                                    echo "Failed to connect to MySQL: ".mysqli_connect_error($conn);
                                 }
+                            
+                                $query = "INSERT INTO `membership` VALUES (DEFAULT,'$firstName','$lastName','$userName','$email','$password', '$imageName');";
+                                $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+                                if (!$result) {
+                                    die(mysqli_error($conn));
+                                } else {
+                                    $row_count = mysqli_affected_rows($conn);
+                                    if ($row_count == 1) {
+                                        $memberID = mysqli_insert_id($conn);
+                                        $insert_success = TRUE;
+                                        echo "<p>Record inserted</p>";
+                                    } else {
+                                        echo "<p>Insert failed</p>";
+                                    }
+                                }
+                                
                             } else {
                                 $imageError .= "<p><span class='error'>Your file could not be uploaded. $fileInfo</span></p>";
                         } 
@@ -121,47 +134,30 @@ if (isset($_POST['submit'])) {
             $imageError .= "<p><span class='error'>Invalid file. This is not an image.</span></p>";
         }
     }
-    $firstname2 = mysqli_real_escape_string($conn, trim($_POST['firstName']));
-	$lastname2 = mysqli_real_escape_string($conn, trim($_POST['lastName']));
-	$username2 = mysqli_real_escape_string($conn, trim($_POST['userName']));
-	$email2 = mysqli_real_escape_string($conn, trim($_POST['email']));
-	$password2 = mysqli_real_escape_string($conn, trim($_POST['password']));
-
-    if (!$conn) {
-		echo "Failed to connect to MySQL: ".mysqli_connect_error($conn);
-	}
-
-    $query = "INSERT INTO `membership` VALUES (DEFAULT,'$firstname2','$lastname2','$username2','$email2','$password2', DEFAULT);";
-	$result = mysqli_query($conn, $query) or die(mysqli_error($conn));
-	if (!$result) {
-		die(mysqli_error($conn));
-	} else {
-		$row_count = mysqli_affected_rows($conn);
-		if ($row_count == 1) {
-			$memberID = mysqli_insert_id($conn);
-			$insert_success = TRUE;
-			echo "<p>Record inserted</p>";
-		} else {
-			echo "<p>Insert failed</p>";
-		}
-	}
 }
 
-if ($signedIn) {
-    $poem = "poem.txt";
-    $fp = fopen($poem, "r") or die ("Couldn't open file.");
-    if (!feof($fp)) {
-        $poemText = fgets($fp);
-    } else {
-        $pageContent .= "Your information was not found. Please try again later.<br>";
+if ($insert_success) {
+    $query = "SELECT * FROM `membership` WHERE `memberID` = $memberID;";
+    $result = mysqli_query($conn,$query);
+    if (!$result) {
+        die(mysqli_error($conn));
     }
-    $fp = fclose($fp);
+    if ($row = mysqli_fetch_assoc($result)) {
+        // set the database field values to local variables for futher use in the script
+        $firstName = $row['firstname'];
+        $lastName = $row['lastname'];
+        $userName = $row['username'];
+        $email = $row['email'];
+        $image = $row['image'];
+    } else {
+        echo "Sorry, we couldn't find your record.";
+    }
 
     $pageContent .= <<<HERE
     <section class="container pl-2">
         $errMsg
         <p>Thank you, $firstName $lastName.</p>
-        <figure><img src="$file" alt="Profile Image" class="profilePic" />
+        <figure><img src="uploads/$image" alt="Profile Image" class="profilePic" />
         <figcaption>Member: $firstName $lastName</figcaption>
         </figure>
         <p>Email: $email</p>
@@ -169,28 +165,8 @@ if ($signedIn) {
         <p>Your information is now saved. Use the username provided below for future logins.</p>
         <p>Username: <strong>$userName</strong></p>
         <p><a href="file-uploads.php>Page Reload</a></p>
-        <h2>A Poem You Might Enjoy: </h2>
-        <p>$poemText</p>
     </section>\n
     HERE;
-
-    $query2 = "SELECT * FROM `membership` WHERE `memberID` = $memberID;";
-    $result2 = mysqli_query($conn,$query2);
-    if (!$result) {
-        die(mysqli_error($conn));
-    }
-    if ($row = mysqli_fetch_assoc($result2)) {
-        // set the database field values to local variables for futher use in the script
-        $firstname = $row['firstname'];
-        $lastname = $row['lastname'];
-        $username = $row['username'];
-        $email = $row['email'];
-        $image = $row['image'];
-    } else {
-        echo "Sorry, we couldn't find your record.";
-    }
-    echo "<p>Hello, $firstname $lastname. Your username is $username and your email is $email.</p>";
-    echo '<img src="$file" . $image . " alt="Profile Image" />';
 
 } else {
 $pageContent .= <<<HERE
