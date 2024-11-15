@@ -20,7 +20,7 @@ $imageError = NULL;
 $fileInfo = NULL;
 $imageName = NULL;
 $valid = TRUE;
-$signedIn = FALSE;
+$insert_success = FALSE;
 $pageContent = NULL;
 $errMsg = NULL;
 
@@ -64,7 +64,7 @@ if (isset($_POST['submit'])) {
         $valid = FALSE;
     }
 
-    $userName = strtolower(substr($firstname,0,1) . $lastName);
+    $userName = strtolower(substr($firstName,0,1) . $lastName);
 
     if ($valid) {
         $filetype = pathinfo($_FILES['profilePic']['name'],PATHINFO_EXTENSION);
@@ -103,7 +103,7 @@ if (isset($_POST['submit'])) {
                         if (file_exists($file)) {
                             $imageError = "<span class='error'>$imageName already exists.</span>";
                         } else {
-                            if (move_upload_file($_FILES['profilePic']['tmp_name'], $file)) {
+                            if (move_uploaded_file($_FILES['profilePic']['tmp_name'], $file)) {
                                 $fileInfo .= "<p>Your file has been uploaded. Saved as $file.</p>";
 
                                 if (!$conn) {
@@ -169,11 +169,12 @@ if ($insert_success) {
     HERE;
 
 } else {
+echo "Hello World";  
 $pageContent .= <<<HERE
 <section class="container pl-2">
     $errMsg
     <p>User Sign-In</p>
-        <form action="file-uploads.php" enctype="multipart/form-data" method="post">
+        <form action="register.php" enctype="multipart/form-data" method="post">
             <div class="form-group">
                 <label for="firstName">First Name:</label>
                 <input type="text" name="firstName" id="firstName" value="$firstName" class="form-control"> $firstNameError
@@ -184,7 +185,7 @@ $pageContent .= <<<HERE
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="text" name="email" id="email" value="$email" class="form-control"> $emailError $emailFormantError
+                <input type="text" name="email" id="email" value="$email" class="form-control"> $emailError $emailFormatError
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
