@@ -135,7 +135,7 @@ if ($signedIn) {
     <section class="container pl-2">
         $errMsg
         <p>Thank you, $firstName $lastName.</p>
-        <figure><img src="$file" alt="Profile Image" class="profilePic" />
+        <figure><img src="uploads/$imageName" alt="Profile Image" class="profilePic" />
         <figcaption>Member: $firstName $lastName</figcaption>
         </figure>
         <p>Email: $email</p>
@@ -163,7 +163,7 @@ $pageContent .= <<<HERE
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="text" name="email" id="email" value="$email" class="form-control"> $emailError $emailFormantError
+                <input type="text" name="email" id="email" value="$email" class="form-control"> $emailError $emailFormatError
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>

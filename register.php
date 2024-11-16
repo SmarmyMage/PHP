@@ -156,20 +156,23 @@ if ($insert_success) {
     $pageContent .= <<<HERE
     <section class="container pl-2">
         $errMsg
-        <p>Thank you, $firstName $lastName.</p>
         <figure><img src="uploads/$image" alt="Profile Image" class="profilePic" />
         <figcaption>Member: $firstName $lastName</figcaption>
         </figure>
+        <p>Thank you, $firstName $lastName.</p>
+        <p><a href="profile.php?update&memberID=$memberID">Update Profile</a></p>
         <p>Email: $email</p>
         <p>You are now signed into our system. We hope you enjoy the site.</p>
         <p>Your information is now saved. Use the username provided below for future logins.</p>
         <p>Username: <strong>$userName</strong></p>
-        <p><a href="file-uploads.php>Page Reload</a></p>
+        <p><a href="register.php>Page Reload</a></p>
     </section>\n
     HERE;
 
-} else {
-echo "Hello World";  
+} else { 
+    if (isset($_GET['action'])) {
+        $errMsg = "<div> class='alert alert-danger my-2'> Record " . $_GET['action'] . "</div>";
+    }
 $pageContent .= <<<HERE
 <section class="container pl-2">
     $errMsg
