@@ -34,6 +34,7 @@ $valid = TRUE;
 $insert_success = FALSE;
 $pageContent = NULL;
 $errMsg = NULL;
+$update = FALSE;
 
 if(isset($_GET['action'])) {
     $errMsg = "<p class'text-danger'>Record " .$_Get['action'] . "</p>";
