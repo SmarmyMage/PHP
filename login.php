@@ -39,4 +39,6 @@ $pageContent .= <<<HERE
 </form>
 HERE;
 
+include 'template.php';
+
 ?>
