@@ -18,8 +18,10 @@
          <a href="register.php">Register</a> |
          <a href="profile.php">Profile</a> 
       </nav>
-    
-      <?php echo $pageContent; ?>
+
+      <main class="container ml-2">
+         <?php echo $pageContent; ?>
+      </main>
 
     </body>
 
