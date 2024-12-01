@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'config.php';
 
 if (!$conn) {
@@ -9,6 +10,8 @@ if (isset($_POST['memberID'])) {
     $memberID = $_POST['memberID'];
 } elseif (isset($_GET['memberID'])) {
     $memberID = $_GET['memberID'];
+} elseif (isset($_SESSION['memberID'])) {
+    $memberID = $_SESSION['memberID'];
 } else {
     header("Location: register.php");
     exit();
@@ -89,7 +92,7 @@ if(isset($_POST['update'])) {
             $passwordMismatch = '<span class="error">Passwords do not match each other.</span>';
             $valid = FALSE;
         } else {
-            // $password = password_hash($password, PASSWORD_DEFAULT);
+            $password = password_hash($password, PASSWORD_DEFAULT);
             $query = "UPDATE 'membership' SET 'password' = '$password' WHERE 'memberID' = $memberID;";
             $result = mysqli_query($conn, $query);
             if (!$result) {
@@ -146,6 +149,62 @@ if ($row = mysqli_fetch_assoc($result)) {
     $errMsg = "Sorry, we couldn't find your record.";
 }
 
+if ($valid) { // if the form data are valid
+	$stmt = $conn->stmt_init(); // create the database connection
+	if ($stmt->prepare("SELECT `memberID`, `password` FROM `membership` WHERE `username` = $userName;")) { // prepare the db query
+		$stmt->bind_param("s", $username); // lookup this user
+		$stmt->execute();
+		$stmt->store_result();
+		$stmt->bind_result($memberID, $password); // bind the stored password from the db record to a variable
+		$stmt->fetch();
+		$stmt->free_result();
+		$stmt->close();
+	} else {
+		$msg = <<<HERE
+		<h3 class="error">We could not find you in the system. 
+		New users must register before gaining access to the site. 
+		If you forgot your login, please use the Password Recover tool.</h3>
+HERE;
+	}
+
+if (password_verify($passwordSubmit, $password)) { // checks submitted password against stored password for a match
+	$stmt = $conn->stmt_init();
+	if ($stmt->prepare("SELECT `firstname`, `lastname`, `email` FROM `membership` WHERE `memberID` = $memberID;")) {
+		$stmt->bind_param("i", $memberID);
+		$stmt->execute();
+		$stmt->store_result();
+		$stmt->bind_result($firstName, $lastName, $email); // get authenticated member record
+			
+		if($stmt->num_rows == 1){
+			$stmt->fetch();
+
+			// $_SESSION['memberID'] = $memberID;
+				
+			// setcookie("firstname", $firstname, time()+(3600*3));
+
+			header("Location: profile.php?memberID=$memberID&msg=You are logged in.");
+			exit;
+
+		} else {
+			$msg = <<<HERE
+			<h3 class="error">We could not access the login records.</h3>
+HERE;
+	    }
+		$stmt->close();
+	} else {
+		$msg = <<<HERE
+		<h3 class="error">We could not find your information.</h3>
+HERE;
+		}
+	} else {
+		$msg = <<<HERE
+		<h3 class="error">We could not find you in the system. 
+		New users must register before gaining access to the site. 
+		If you forgot your login, please use the Password Recover tool.</h3>
+HERE;
+	}
+}
+
 if (!$update) {
 $pageContent .= <<<HERE
     <section class="container">
@@ -186,7 +245,7 @@ $pageContent .= <<<HERE
             </div>
             <div class="form-group">
                 <label for="password2">Verify Password:</label>
-                <input type="text" name="password2" id="password2" value="" class="form-control"> $passwordMismatch
+                <input type="password" name="password2" id="password2" value="" class="form-control"> $passwordMismatch
             </div>
             <figure><img src="uploads/$image" alt="Profile Image" class="profilePic" />
                 <figcaption>Member: $firstName $lastName</figcaption>

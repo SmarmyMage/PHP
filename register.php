@@ -64,6 +64,12 @@ if (isset($_POST['submit'])) {
         $valid = FALSE;
     }
 
+    if (!preg_match('/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/',$password)){
+	$passwordError = "Must contain at least one number and 
+	one uppercase and lowercase letter, and at least 8 or more characters";
+	$valid = FALSE;
+    }
+
     $userName = strtolower(substr($firstName,0,1) . $lastName);
 
     if ($valid) {
@@ -148,7 +154,14 @@ if ($insert_success) {
         $lastName = $row['lastname'];
         $userName = $row['username'];
         $email = $row['email'];
-        $image = $row['image'];
+        $image = $row['image'];     
+        // $password = password_hash($password, PASSWORD_DEFAULT);
+        // $stmt = $conn->stmt_init();
+        // if ($stmt->prepare("INSERT INTO `membership` SET `password` = '$password' WHERE `memberID` = '$memberID';")) {
+        // $stmt->bind_param("si", $password, $memberID);
+        // $stmt->execute();
+        // $stmt->close();
+    }
     } else {
         echo "Sorry, we couldn't find your record.";
     }
@@ -192,11 +205,13 @@ $pageContent .= <<<HERE
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="text" name="password" id="password" value="" class="form-control"> $passwordError
+                <input type="password" name="password" id="password" value="" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" 
+                placeholder="Password" required /> $passwordError
             </div>
             <div class="form-group">
                 <label for="password2">Verify Password:</label>
-                <input type="text" name="password2" id="password2" value="" class="form-control"> $passwordMismatch
+                <input type="password" name="password2" id="password2" value="" class="form-control"> $passwordMismatch
             </div>
             <p>Please select an image for your profile.</p>
             <div class="form-group">

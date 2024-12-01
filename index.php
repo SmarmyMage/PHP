@@ -1,4 +1,5 @@
 <?php
+include 'config.php';
 $pageTitle = "Index";
 $pageContent = NULL;
 $name = "Anthony Reyna";

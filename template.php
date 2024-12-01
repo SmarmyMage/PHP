@@ -16,10 +16,13 @@
          <a href="form-validation.php">Form</a> |
          <a href="file-uploads.php">File Uploads</a> |
          <a href="register.php">Register</a> |
-         <a href="profile.php">Profile</a> 
+         <a href="profile.php">Profile</a> |
+
+         <a><?php echo $loginOut; ?></a>
       </nav>
 
       <main class="container ml-2">
+         <h1><a href="index.php">Welcome, Guest</a></h1>
          <?php echo $pageContent; ?>
       </main>
 
