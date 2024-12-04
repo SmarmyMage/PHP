@@ -17,6 +17,7 @@
          <a href="file-uploads.php">File Uploads</a> |
          <a href="register.php">Register</a> |
          <a href="profile.php">Profile</a> |
+         <a href="blog.php">Blog</a> |
 
          <a><?php echo $loginOut; ?></a>
       </nav>
