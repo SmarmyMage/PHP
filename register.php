@@ -161,11 +161,10 @@ if ($insert_success) {
         // $stmt->bind_param("si", $password, $memberID);
         // $stmt->execute();
         // $stmt->close();
-    }
     } else {
         echo "Sorry, we couldn't find your record.";
     }
-
+    
     $pageContent .= <<<HERE
     <section class="container pl-2">
         $errMsg

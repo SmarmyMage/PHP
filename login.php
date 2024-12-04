@@ -6,14 +6,14 @@ if (!$conn) {
     echo "Failed to connect to MySQL: ".mysqli_connect_error();
 }
 
-// if (isset($_POST['memberID'])) {
-//     $memberID = $_POST['memberID'];
-// } elseif (isset($_GET['memberID'])) {
-//     $memberID = $_GET['memberID'];
-// } else {
-//     header("Location: register.php");
-//     exit();
-// }
+if (isset($_POST['memberID'])) {
+     $memberID = $_POST['memberID'];
+} elseif (isset($_GET['memberID'])) {
+    $memberID = $_GET['memberID'];
+} else {
+     header("Location: register.php");
+     exit();
+}
  
 $pageTitle = 'Login';
 $pageContent = NULL;
