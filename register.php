@@ -69,6 +69,7 @@ if (isset($_POST['submit'])) {
 	one uppercase and lowercase letter, and at least 8 or more characters";
 	$valid = FALSE;
     }
+    $password = password_hash($password, PASSWORD_DEFAULT);
 
     $userName = strtolower(substr($firstName,0,1) . $lastName);
 

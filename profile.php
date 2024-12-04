@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'config.php';
 
 if (!$conn) {
@@ -40,7 +39,7 @@ $errMsg = NULL;
 $update = FALSE;
 
 if(isset($_GET['action'])) {
-    $errMsg = "<p class'text-danger'>Record " .$_Get['action'] . "</p>";
+    $errMsg = "<p class'text-danger'>Record " .$_GET['action'] . "</p>";
 } else {
     $errMsg = NULL;
 }
@@ -88,7 +87,7 @@ if(isset($_POST['update'])) {
     $password = trim($_POST['password']);
     if(!empty($password)) {
         $password2 = trim($_POST['password2']);
-        if (strcmp($password, $password2)) {
+        if (!strcmp($password, $password2)) {
             $passwordMismatch = '<span class="error">Passwords do not match each other.</span>';
             $valid = FALSE;
         } else {
@@ -149,61 +148,61 @@ if ($row = mysqli_fetch_assoc($result)) {
     $errMsg = "Sorry, we couldn't find your record.";
 }
 
-if ($valid) { // if the form data are valid
-	$stmt = $conn->stmt_init(); // create the database connection
-	if ($stmt->prepare("SELECT `memberID`, `password` FROM `membership` WHERE `username` = $userName;")) { // prepare the db query
-		$stmt->bind_param("s", $username); // lookup this user
-		$stmt->execute();
-		$stmt->store_result();
-		$stmt->bind_result($memberID, $password); // bind the stored password from the db record to a variable
-		$stmt->fetch();
-		$stmt->free_result();
-		$stmt->close();
-	} else {
-		$msg = <<<HERE
-		<h3 class="error">We could not find you in the system. 
-		New users must register before gaining access to the site. 
-		If you forgot your login, please use the Password Recover tool.</h3>
-HERE;
-	}
+// if ($valid) { // if the form data are valid
+// 	$stmt = $conn->stmt_init(); // create the database connection
+// 	if ($stmt->prepare("SELECT `memberID`, `password` FROM `membership` WHERE `username` = '$userName';")) { // prepare the db query
+// 		$stmt->bind_param("s", $username); // lookup this user
+// 		$stmt->execute();
+// 		$stmt->store_result();
+// 		$stmt->bind_result($memberID, $password); // bind the stored password from the db record to a variable
+// 		$stmt->fetch();
+// 		$stmt->free_result();
+// 		$stmt->close();
+// 	} else {
+// 		$msg = <<<HERE
+// 		<h3 class="error">We could not find you in the system. 
+// 		New users must register before gaining access to the site. 
+// 		If you forgot your login, please use the Password Recover tool.</h3>
+// HERE;
+// 	}
 
-if (password_verify($passwordSubmit, $password)) { // checks submitted password against stored password for a match
-	$stmt = $conn->stmt_init();
-	if ($stmt->prepare("SELECT `firstname`, `lastname`, `email` FROM `membership` WHERE `memberID` = $memberID;")) {
-		$stmt->bind_param("i", $memberID);
-		$stmt->execute();
-		$stmt->store_result();
-		$stmt->bind_result($firstName, $lastName, $email); // get authenticated member record
+// if (password_verify($passwordSubmit, $password)) { // checks submitted password against stored password for a match
+// 	$stmt = $conn->stmt_init();
+// 	if ($stmt->prepare("SELECT `firstname`, `lastname`, `email` FROM `membership` WHERE `memberID` = $memberID;")) {
+// 		$stmt->bind_param("i", $memberID);
+// 		$stmt->execute();
+// 		$stmt->store_result();
+// 		$stmt->bind_result($firstName, $lastName, $email); // get authenticated member record
 			
-		if($stmt->num_rows == 1){
-			$stmt->fetch();
+// 		if($stmt->num_rows == 1){
+// 			$stmt->fetch();
 
-			// $_SESSION['memberID'] = $memberID;
+// 			// $_SESSION['memberID'] = $memberID;
 				
-			// setcookie("firstname", $firstname, time()+(3600*3));
+// 			// setcookie("firstname", $firstname, time()+(3600*3));
 
-			header("Location: profile.php?memberID=$memberID&msg=You are logged in.");
-			exit;
+// 			header("Location: profile.php?memberID=$memberID&msg=You are logged in.");
+// 			exit;
 
-		} else {
-			$msg = <<<HERE
-			<h3 class="error">We could not access the login records.</h3>
-HERE;
-	    }
-		$stmt->close();
-	} else {
-		$msg = <<<HERE
-		<h3 class="error">We could not find your information.</h3>
-HERE;
-		}
-	} else {
-		$msg = <<<HERE
-		<h3 class="error">We could not find you in the system. 
-		New users must register before gaining access to the site. 
-		If you forgot your login, please use the Password Recover tool.</h3>
-HERE;
-	}
-}
+// 		} else {
+// 			$msg = <<<HERE
+// 			<h3 class="error">We could not access the login records.</h3>
+// HERE;
+// 	    }
+// 		$stmt->close();
+// 	} else {
+// 		$msg = <<<HERE
+// 		<h3 class="error">We could not find your information.</h3>
+// HERE;
+// 		}
+// 	} else {
+// 		$msg = <<<HERE
+// 		<h3 class="error">We could not find you in the system. 
+// 		New users must register before gaining access to the site. 
+// 		If you forgot your login, please use the Password Recover tool.</h3>
+// HERE;
+// 	}
+// }
 
 if (!$update) {
 $pageContent .= <<<HERE

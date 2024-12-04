@@ -1,3 +1,24 @@
+<?php
+if (isset($_COOKIE['firstname'])) {
+   $firstName = $_COOKIE['firstname'];
+} else {
+   $firstName = 'Guest';
+}
+if (isset($_SESSION['memberID'])) {
+$loginOut = <<<HERE
+<form action="logout.php" class="form-inline" method="post">
+   <input type="hidden" name="logout">
+  <button class="btn btn-error" name="logout" type="submit">Logout</button>
+</form>
+HERE;
+} else {
+$loginOut = <<<HERE
+<form action="login.php" class="form-inline" method="post">
+  <button class="btn btn-primary" name="loginButton" type="submit">Login</button>
+</form>
+HERE;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +26,7 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-      <title><?php echo $pageTitle; ?></title>
+      <title><?= $pageTitle; ?></title>
    </head>
 
    <body>
@@ -19,12 +40,12 @@
          <a href="profile.php">Profile</a> |
          <a href="blog.php">Blog</a> |
 
-         <a><?php echo $loginOut; ?></a>
+         <?= $loginOut; ?>
       </nav>
 
       <main class="container ml-2">
-         <h1><a href="index.php">Welcome, Guest</a></h1>
-         <?php echo $pageContent; ?>
+         <h1><a href="index.php">Welcome, <?= $firstName; ?></a></h1>
+         <?= $pageContent; ?>
       </main>
 
     </body>
