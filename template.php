@@ -8,7 +8,7 @@ if (isset($_SESSION['memberID'])) {
 $loginOut = <<<HERE
 <form action="logout.php" class="form-inline" method="post">
    <input type="hidden" name="logout">
-  <button class="btn btn-error" name="logout" type="submit">Logout</button>
+  <button class="btn btn-danger" name="logout" type="submit">Logout</button>
 </form>
 HERE;
 } else {
@@ -47,8 +47,7 @@ HERE;
          <h1><a href="index.php">Welcome, <?= $firstName; ?></a></h1>
          <?= $pageContent; ?>
       </main>
-
-    </body>
+   </body>
 
    <footer>
         <p>&copy; Anthony Reyna, MyWebTraining, 2024</p>

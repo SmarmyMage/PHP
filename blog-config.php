@@ -6,7 +6,7 @@ if (isset($_POST['login'])) {
 $loginOut .= <<<HERE
 <form action="logout.php" class="form-inline" method="post">
     <input type="hidden" name="logout">
-	<button class="btn btn-success" name="logout" type="submit">Logout</button>
+	<button class="btn btn-danger" name="logout" type="submit">Logout</button>
 </form>
 HERE;
 } else {
@@ -28,12 +28,20 @@ function debug_data() { // called in template to print arrays at top of any page
     echo print_r($_GET);
     echo '</pre>';
 }
-//debug_data(); // Comment this out to hide debug information
+// debug_data(); // Comment this out to hide debug information
+
+function auth_user() {
+	if(isset($_SESSION['memberID'])) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
 
 // this function returns the contents of a blog post given its postID
 function blogPost($conn, $postID) {
 	$stmt = $conn->stmt_init();
-	if ($stmt->prepare("SELECT postTitle, postContent FROM blog WHERE postID = ?")) {
+	if ($stmt->prepare("SELECT `postTitle`, `postContent` FROM `blog` WHERE `postID` = ?")) {
 		$stmt->bind_param("i", $postID);
 		$stmt->execute();
 		$stmt->bind_result($postTitle, $postContent);
@@ -47,7 +55,7 @@ function blogPost($conn, $postID) {
 // this function returns a multidimensional array of blog post IDs and titles
 function blogPosts($conn) {
 	$stmt = $conn->stmt_init();
-	if ($stmt->prepare("SELECT postID, postTitle FROM blog")) {
+	if ($stmt->prepare("SELECT `postID`, `postTitle` FROM `blog`")) {
 		$stmt->execute();
 		$stmt->bind_result($postID, $postTitle);
 		$stmt->store_result();
