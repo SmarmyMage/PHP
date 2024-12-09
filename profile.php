@@ -17,21 +17,21 @@ if (isset($_POST['memberID'])) {
 }
 
 $pageTitle = "Profile";
-$firstName = NULL;
-$lastName = NULL;
+$firstname = NULL;
+$lastname = NULL;
 $email = NULL;
-$userName = NULL;
+$username = NULL;
 $password = NULL;
 $password2 = NULL;
-$firstNameError = NULL;
-$lastNameError = NULL;
+$firstnameError = NULL;
+$lastnameError = NULL;
 $emailError = NULL;
 $emailFormatError = NULL;
 $passwordError = NULL;
 $passwordMismatch = NULL;
 $imageError = NULL;
 $fileInfo = NULL;
-$imageName = NULL;
+$imagename = NULL;
 $valid = TRUE;
 $insert_success = FALSE;
 $pageContent = NULL;
@@ -49,15 +49,15 @@ if(isset($_GET['update'])) {
 }
 
 if(isset($_POST['update'])) {
-    $firstName = mysqli_real_escape_string($conn, trim($_POST['firstName']));
-    if (empty($firstName)) {
-        $firstNameError = "<span class='error'>You must enter a name in this field.</span>";
+    $firstname = mysqli_real_escape_string($conn, trim($_POST['firstname']));
+    if (empty($firstname)) {
+        $firstnameError = "<span class='error'>You must enter a name in this field.</span>";
         $valid = FALSE;
     }
 
-    $lastName = mysqli_real_escape_string($conn, trim($_POST['lastName']));
-    if (empty($lastName)) {
-        $lastNameError = "<span class='error'>You must enter a name in this field.</span>";
+    $lastname = mysqli_real_escape_string($conn, trim($_POST['lastname']));
+    if (empty($lastname)) {
+        $lastnameError = "<span class='error'>You must enter a name in this field.</span>";
         $valid = FALSE;
     }
 
@@ -72,17 +72,17 @@ if(isset($_POST['update'])) {
         $valid = FALSE;
     }
 
-    //$userName = strtolower(substr($firstName,0,1) . $lastName);
+    //$username = strtolower(substr($firstname,0,1) . $lastname);
 
     if($valid) {
-        $query = "UPDATE 'membership' SET 'firstname' = '$firstName', 'lastname' = '$lastName' 'email' = '$email' WHERE 'memberID' = $memberID;";
+        $query = "UPDATE 'membership' SET 'firstname' = '$firstname', 'lastname' = '$lastname' 'email' = '$email' WHERE 'memberID' = $memberID;";
         $result = mysqli_query($conn, $query);
         if (!$result) {
             die(mysqli_error($conn));
         }
     }
 
-    //'username' = '$userName'
+    //'username' = '$username'
 
     $password = trim($_POST['password']);
     if(!empty($password)) {
@@ -108,13 +108,13 @@ if(isset($_POST['update'])) {
     }
 
     if (file_exist($file)) {
-        $imageError = "<span class='error'>$imageName already exist.</span>";
+        $imageError = "<span class='error'>$imagename already exist.</span>";
         $valid = FALSE;
     } else {
         if (move_uploaded_file($_FILE['profilePic']['tmp_name'], $file)) {
             $fileInfo .= "<p<Your file has been uploaded. Stored as $file</p>";
 
-            $query = "UPDATE 'membership' SET 'image' = '$imageName' WHERE 'memberID' = $memberID;";
+            $query = "UPDATE 'membership' SET 'image' = '$imagename' WHERE 'memberID' = $memberID;";
             $result = mysqli_query($conn, $query);
             if (!$result) {
                 die(mysqli_error($conn));
@@ -139,9 +139,9 @@ if (!$result) {
     die(mysqli_error($conn));
 }
 if ($row = mysqli_fetch_assoc($result)) {
-    $firstName = $row['firstname'];
-    $lastName = $row['lastname'];
-    $userName = $row['username'];
+    $firstname = $row['firstname'];
+    $lastname = $row['lastname'];
+    $username = $row['username'];
     $email = $row['email'];
     $image = $row['image'];
 } else {
@@ -150,7 +150,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 
 // if ($valid) { // if the form data are valid
 // 	$stmt = $conn->stmt_init(); // create the database connection
-// 	if ($stmt->prepare("SELECT `memberID`, `password` FROM `membership` WHERE `username` = '$userName';")) { // prepare the db query
+// 	if ($stmt->prepare("SELECT `memberID`, `password` FROM `membership` WHERE `username` = '$username';")) { // prepare the db query
 // 		$stmt->bind_param("s", $username); // lookup this user
 // 		$stmt->execute();
 // 		$stmt->store_result();
@@ -172,7 +172,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 // 		$stmt->bind_param("i", $memberID);
 // 		$stmt->execute();
 // 		$stmt->store_result();
-// 		$stmt->bind_result($firstName, $lastName, $email); // get authenticated member record
+// 		$stmt->bind_result($firstname, $lastname, $email); // get authenticated member record
 			
 // 		if($stmt->num_rows == 1){
 // 			$stmt->fetch();
@@ -209,14 +209,14 @@ $pageContent .= <<<HERE
     <section class="container">
         $errMsg
         <figure><img src="uploads/$image" alt="Profile Image" class="profilePic" />
-            <figcaption>Member: $firstName $lastName</figcaption>
+            <figcaption>Member: $firstname $lastname</figcaption>
         </figure>
-        <p>Thank you, $firstName $lastName.</p>
+        <p>Thank you, $firstname $lastname.</p>
         <p><a href="profile.php?update&memberID=$memberID">Update Profile</a></p>
         <p>Email: $email</p>
         <p>You are now signed into our system. We hope you enjoy the site.</p>
         <p>Your information is now saved. Use the username provided below for future logins.</p>
-        <p>Username: <strong>$userName</strong></p>
+        <p>Username: <strong>$username</strong></p>
     </section>\n
 HERE;
 
@@ -227,12 +227,12 @@ $pageContent .= <<<HERE
         <p>Please update your information.</p>
         <form action="profile.php" enctype="multipart/form-data" method="post">
             <div class="form-group">
-                <label for="firstName">First Name:</label>
-                <input type="text" name="firstName" id="firstName" value="$firstName" class="form-control"> $firstNameError
+                <label for="firstname">First name:</label>
+                <input type="text" name="firstname" id="firstname" value="$firstname" class="form-control"> $firstnameError
             </div>
             <div class="form-group">
-                <label for="lastName">Last Name:</label>
-                <input type="text" name="lastName" id="lastName" value="$lastName" class="form-control"> $lastNameError
+                <label for="lastname">Last name:</label>
+                <input type="text" name="lastname" id="lastname" value="$lastname" class="form-control"> $lastnameError
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
@@ -247,7 +247,7 @@ $pageContent .= <<<HERE
                 <input type="password" name="password2" id="password2" value="" class="form-control"> $passwordMismatch
             </div>
             <figure><img src="uploads/$image" alt="Profile Image" class="profilePic" />
-                <figcaption>Member: $firstName $lastName</figcaption>
+                <figcaption>Member: $firstname $lastname</figcaption>
             </figure>
             <p style="clear: both;">Please select an image for your profile.</p>
             <div class="form-group">
@@ -256,7 +256,7 @@ $pageContent .= <<<HERE
                 <input type="file" name="profilePic" id="profilePic" class="form-control">
             </div>
             <div class="form-group">
-                <input type="hidden" name="imageName" value="$image" class="btn btn-primary">
+                <input type="hidden" name="imagename" value="$image" class="btn btn-primary">
                 <input type="hidden" name="memberID" value="$memberID" class="btn btn-primary">
                 <input type="submit" name="update" value="Update Profile" class="btn btn-primary">
             </div>

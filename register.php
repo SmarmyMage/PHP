@@ -2,15 +2,15 @@
 include_once 'config.php';
 
 $pageTitle = "Register";
-$firstName = NULL;
-$lastName = NULL;
+$firstname = NULL;
+$lastname = NULL;
 $email = NULL;
-$userName = NULL;
+$username = NULL;
 $password = NULL;
 $password2 = NULL;
 
-$firstNameError = NULL;
-$lastNameError = NULL;
+$firstnameError = NULL;
+$lastnameError = NULL;
 $emailError = NULL;
 $emailFormatError = NULL;
 $passwordError = NULL;
@@ -18,7 +18,7 @@ $passwordMismatch = NULL;
 $imageError = NULL;
 
 $fileInfo = NULL;
-$imageName = NULL;
+$imagename = NULL;
 $valid = TRUE;
 $insert_success = FALSE;
 $pageContent = NULL;
@@ -26,17 +26,17 @@ $errMsg = NULL;
 
 
 if (isset($_POST['submit'])) {
-//  $firstName = ucwords(htmlspecialchars($_POST['firstName']));
-    $firstName = mysqli_real_escape_string($conn, trim($_POST['firstName']));
-    if (empty($firstName)) {
-        $firstNameError = "<span class='error'>You must enter a name in this field.</span>";
+//  $firstname = ucwords(htmlspecialchars($_POST['firstname']));
+    $firstname = mysqli_real_escape_string($conn, trim($_POST['firstname']));
+    if (empty($firstname)) {
+        $firstnameError = "<span class='error'>You must enter a name in this field.</span>";
         $valid = FALSE;
     }
 
-    // $lastName = ucwords(htmlspecialchars($_POST['lastName']));
-    $lastName = mysqli_real_escape_string($conn, trim($_POST['lastName']));
-    if (empty($lastName)) {
-        $lastNameError = "<span class='error'>You must enter a name in this field.</span>";
+    // $lastname = ucwords(htmlspecialchars($_POST['lastname']));
+    $lastname = mysqli_real_escape_string($conn, trim($_POST['lastname']));
+    if (empty($lastname)) {
+        $lastnameError = "<span class='error'>You must enter a name in this field.</span>";
         $valid = FALSE;
     }
 
@@ -71,7 +71,7 @@ if (isset($_POST['submit'])) {
     }
     $password = password_hash($password, PASSWORD_DEFAULT);
 
-    $userName = strtolower(substr($firstName,0,1) . $lastName);
+    $username = strtolower(substr($firstname,0,1) . $lastname);
 
     if ($valid) {
         $filetype = pathinfo($_FILES['profilePic']['name'],PATHINFO_EXTENSION);
@@ -101,14 +101,14 @@ if (isset($_POST['submit'])) {
                         break;
                     }
                 } else {
-                        $imageName = $_FILES["profilePic"]["name"];
-                        $file = "uploads/$imageName";
-                        $fileInfo = "<p>Upload: $imageName<br>";
+                        $imagename = $_FILES["profilePic"]["name"];
+                        $file = "uploads/$imagename";
+                        $fileInfo = "<p>Upload: $imagename<br>";
                         $fileInfo .= "Type: " . $_FILES["profilePic"]["type"] . "<br>";
                         $fileInfo .= "Size: " . ($_FILES["profilePic"]["size"] / 1024) . " Kb<br>";
                         $fileInfo .= "Temp file: " . $_FILES["profilePic"]["tmp_name"] . "</p>";
                         if (file_exists($file)) {
-                            $imageError = "<span class='error'>$imageName already exists.</span>";
+                            $imageError = "<span class='error'>$imagename already exists.</span>";
                         } else {
                             if (move_uploaded_file($_FILES['profilePic']['tmp_name'], $file)) {
                                 $fileInfo .= "<p>Your file has been uploaded. Saved as $file.</p>";
@@ -117,7 +117,7 @@ if (isset($_POST['submit'])) {
                                     echo "Failed to connect to MySQL: ".mysqli_connect_error($conn);
                                 }
                             
-                                $query = "INSERT INTO `membership` VALUES (DEFAULT,'$firstName','$lastName','$userName','$email','$password', '$imageName');";
+                                $query = "INSERT INTO `membership` VALUES (DEFAULT,'$firstname','$lastname','$username','$email','$password', '$imagename');";
                                 $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
                                 if (!$result) {
                                     die(mysqli_error($conn));
@@ -151,9 +151,9 @@ if ($insert_success) {
     }
     if ($row = mysqli_fetch_assoc($result)) {
         // set the database field values to local variables for futher use in the script
-        $firstName = $row['firstname'];
-        $lastName = $row['lastname'];
-        $userName = $row['username'];
+        $firstname = $row['firstname'];
+        $lastname = $row['lastname'];
+        $username = $row['username'];
         $email = $row['email'];
         $image = $row['image'];     
         // $password = password_hash($password, PASSWORD_DEFAULT);
@@ -170,14 +170,14 @@ if ($insert_success) {
     <section class="container pl-2">
         $errMsg
         <figure><img src="uploads/$image" alt="Profile Image" class="profilePic" />
-        <figcaption>Member: $firstName $lastName</figcaption>
+        <figcaption>Member: $firstname $lastname</figcaption>
         </figure>
-        <p>Thank you, $firstName $lastName.</p>
+        <p>Thank you, $firstname $lastname.</p>
         <p><a href="profile.php?update&memberID=$memberID">Update Profile</a></p>
         <p>Email: $email</p>
         <p>You are now signed into our system. We hope you enjoy the site.</p>
         <p>Your information is now saved. Use the username provided below for future logins.</p>
-        <p>Username: <strong>$userName</strong></p>
+        <p>Username: <strong>$username</strong></p>
         <p><a href="register.php>Page Reload</a></p>
     </section>\n
     HERE;
@@ -192,12 +192,12 @@ $pageContent .= <<<HERE
     <p>User Sign-In</p>
         <form action="register.php" enctype="multipart/form-data" method="post">
             <div class="form-group">
-                <label for="firstName">First Name:</label>
-                <input type="text" name="firstName" id="firstName" value="$firstName" class="form-control"> $firstNameError
+                <label for="firstname">First name:</label>
+                <input type="text" name="firstname" id="firstname" value="$firstname" class="form-control"> $firstnameError
             </div>
             <div class="form-group">
-                <label for="lastName">Last Name:</label>
-                <input type="text" name="lastName" id="lastName" value="$lastName" class="form-control"> $lastNameError
+                <label for="lastname">Last name:</label>
+                <input type="text" name="lastname" id="lastname" value="$lastname" class="form-control"> $lastnameError
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>

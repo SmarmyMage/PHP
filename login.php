@@ -17,19 +17,27 @@ if (!$conn) {
  
 $pageTitle = 'Login';
 $pageContent = NULL;
-$userName = NULL;
+$username = NULL;
 $password = NULL;
-$userNameError = NULL;
+$usernameError = NULL;
 $passwordError = NULL;
 $login = NULL;
 $logOutButton = NULL;
+$msg = NULL;
+
+if(filter_has_var(INPUT_GET, 'msg')) {
+    $msg = filter_input(INPUT_GET, 'msg');
+    $msg = "<p class='alert alert-success'>$msg</p>";
+} else {
+    $msg = NULL;
+}
 
 
 if (isset($_POST['login'])) {
-    $userName = $_POST['username'];
+    $username = $_POST['username'];
 	$passwordSubmit = $_POST['password'];
 
-	$query = "SELECT `memberID`, `password` FROM `membership` WHERE `username` = '$userName';";
+	$query = "SELECT `memberID`, `password` FROM `membership` WHERE `username` = '$username';";
 	$result = mysqli_query($conn,$query);
 	if (!$result) {
 		die(mysqli_error($conn));
@@ -44,15 +52,15 @@ if (isset($_POST['login'])) {
                 $stmt->bind_param("i", $memberID);
                 $stmt->execute();
                 $stmt->store_result();
-                $stmt->bind_result($firstName, $lastName, $email); // get authenticated member record
+                $stmt->bind_result($firstname, $lastname, $email); // get authenticated member record
                     
                 if($stmt->num_rows == 1){
                     $stmt->fetch();
         
                     $_SESSION['memberID'] = $memberID;
                         
-                    setcookie("firstname", $firstName, time()+(3600*3));
-                    setcookie("lastname", $lastName, time()+(3600*3));
+                    setcookie("firstname", $firstname, time()+(3600*3));
+                    setcookie("lastname", $lastname, time()+(3600*3));
                     setcookie("email", $email, time()+(3600*3));
         
                     header("Location: profile.php?memberID=$memberID&msg=You are logged in.");
@@ -85,7 +93,7 @@ $pageContent .= <<<HERE
 <form action="login.php" method="post">
     <div class="form-group">
         <label>Username</label>
-        <input type="text" class="form-control" id="username" name="username" value="$userName" required />
+        <input type="text" class="form-control" id="username" name="username" value="$username" required />
     </div>
     <div class="form-group">
         <label>Password</label>
