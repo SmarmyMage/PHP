@@ -13,7 +13,7 @@ $orderList = '';
 
 if (empty($_POST['userName'])) {
     $userName = "Guest";
-    $userNameError = "<p class='error'>Username was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
+    $userNameError = "<p class='error'>Username was missing from the form submission and is required to process your order. Please <a href='invoice.php'>go back to the order form</a> and complete the form.</p>";
 } else {
     $userName = $_POST['userName'];
     $userNameError = NULL;
@@ -21,7 +21,7 @@ if (empty($_POST['userName'])) {
 
 if (empty($_POST['quantity'])) {
     $quantity = NULL;
-    $quantityError = "<p class='error'>Quantity was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
+    $quantityError = "<p class='error'>Quantity was missing from the form submission and is required to process your order. Please <a href='invoice.php'>go back to the order form</a> and complete the form.</p>";
 } else {
     $quantity = $_POST['quantity'];
     $quantityError = NULL;
@@ -29,7 +29,7 @@ if (empty($_POST['quantity'])) {
 
 if (!isset($_POST['media'])) {
     $media = NULL;
-    $mediaError = "<p class='error'>Media selection was missing from the form submission and is required to process your order. Please <a href='form.php'>go back to the order form</a> and complete the form.</p>";
+    $mediaError = "<p class='error'>Media selection was missing from the form submission and is required to process your order. Please <a href='invoice.php'>go back to the order form</a> and complete the form.</p>";
 } else {
     $media = $_POST['media'];
     $mediaError = NULL;
@@ -39,33 +39,39 @@ if ($media == "cd") {
     for ($i = 1; $i <= $quantity; $i++) {
         $totalPrice = priceCalc($cdPrice, $_POST['quantity']);
         $totalPrice = $totalPrice + $shipping;
-        $orderList .= "<p>The price for $i CD(s) is $totalCDPrice.<p>";
+        $orderList .= "<p>The price for $i CD(s) is $totalPrice.<p>";
     }
 }
 
-if ($media == "download") {
-    $i = 1;
-    while ($i <= $quantity) {
-        $totalPrice = priceCalc($downloadPrice, $_POST['quantity'])
-        $totalPrice = $totalPrice + $shipping;
-        $orderList .= "<p>The price for $i Download(s) is $totalDownloadPrice.<p>"; 
-        $i++;
-    }
-}
+// if ($media == "download") {
+//     $i = 1;
+//     while ($i <= $quantity) {
+//         $totalPrice = priceCalc($downloadPrice, $_POST['quantity']);
+//         $totalPrice = $totalPrice + $shipping;
+//         $orderList .= "<p>The price for $i Download(s) is $totalDownloadPrice.<p>"; 
+//         $i++;
+//     }
+// }
 
-for ($i = 1, $i <= $quantity, $i++) {
-    $totalPrice = priceCalc($cdPrice, $_POST['quantity']);
-    $totalPrice = $totalPrice + $shipping;
-    echo "<p>The price for $i CD(s) is $totalPrice.<p>";
-}
+// for ($i = 1, $i <= $quantity, $i++) {
+//     $totalPrice = priceCalc($cdPrice, $_POST['quantity']);
+//     $totalPrice = $totalPrice + $shipping;
+//     echo "<p>The price for $i CD(s) is $totalPrice.<p>";
+// }
 
-if ($media == "download") {
-    $i = 1;
-    while ($i <= $quantity) {
-        $totalPrice = priceCalc($downloadPrice, $_POST['quantity'])
-        echo "<p>The price for $i Download(s) is $totalPrice.<p>"; 
-        $i++;
-    }
+// if ($media == "dl") {
+//     $i = 1;
+//     while ($i <= $quantity) {
+//         $totalPrice = priceCalc($downloadPrice, $_POST['quantity']);
+//         echo "<p>The price for $i Download(s) is $totalPrice.<p>"; 
+//         $i++;
+//     }
+// }
+
+while ($media == "dl") {
+    $totalPrice = priceCalc($downloadPrice, $_POST['quantity']);
+    echo "<p>The price for $i Download(s) is $totalPrice.<p>"; 
+    $i++;
 }
 
 ?>
