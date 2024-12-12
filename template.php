@@ -35,6 +35,7 @@ HERE;
          <a href="index.php">Home</a> |
          <a href="array.php">Array</a> |
          <a href="form-validation.php">Form</a> |
+         <a href="invoice.php">Invoice</a> |
          <a href="file-uploads.php">File Uploads</a> |
          <a href="register.php">Register</a> |
          <a href="profile.php">Profile</a> |
